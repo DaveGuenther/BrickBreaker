@@ -1,0 +1,27 @@
+#ifndef GAME_LOOP_H
+#define GAME_LOOP_H
+
+#include <memory>
+#include <SDL2/SDL.h>
+
+class Game_Loop{
+    public:
+        Game_Loop(void);
+        ~Game_Loop();
+
+        bool isRunning();
+
+        void update();
+
+        void shutDown();
+    
+    private:
+        // SDL Objects
+        SDL_Window *window;
+        SDL_Renderer *renderer;
+        SDL_Event event;
+
+        bool running; //If set to false, this will end the 3D engine during the next engine_update()
+        
+};
+#endif
