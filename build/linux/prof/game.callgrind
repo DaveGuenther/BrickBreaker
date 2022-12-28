@@ -15,820 +15,816 @@ calls=6 0
 10 6
 
 fl=(1)
-fn=(4) Game_Loop::update
-cfl=??
-cfn=(3)
-calls=2 0
-22 2
-
-fl=(1)
-fn=(5) main
+fn=(4) main
 cfl=(1)
 cfn=(1)
 calls=5 7
 29 5
 
 fl=(1)
-fn=(5)
+fn=(4)
 cfl=(1)
 cfn=(1)
 calls=6 10
 29 6
 
 fl=(1)
-fn=(5)
+fn=(4)
 cfl=(1)
-cfn=(4)
-calls=84 41
-31 84
-
-fl=(1)
-fn=(5)
-cfl=(1)
-cfn=(4)
-calls=2 22
-31 2
+cfn=(5) Game_Loop::update
+calls=141 41
+31 141
 
 fl=(1)
 fn=(4)
+cfl=(1)
+cfn=(6) Game_Loop::shutDown
+calls=1 49
+34 1
+
+fl=(1)
+fn=(5)
 cfl=??
 cfn=(3)
-calls=84 0
-41 84
+calls=141 0
+41 141
+
+fl=(1)
+fn=(6)
+cfl=??
+cfn=(2)
+calls=1 0
+49 1
 
 fl=??
-fn=(6) recvmsg@@GLIBC_2.2.5
+fn=(7) __driDriverGetExtensions_d3d12
 0 1
 
 fl=??
-fn=(7) glLabelObjectEXT
+fn=(8) xcb_flush
 cfl=??
-cfn=(8) XML_ParseBuffer
+cfn=(9) xcb_get_setup
 calls=1 0
 0 1
 
 fl=??
-fn=(9) __driDriverGetExtensions_d3d12
+fn=(10) 0x00007f9428ff9ab8
 cfl=??
-cfn=(9)
-calls=19 0
-0 19
-
-fl=??
-fn=(3)
-cfl=??
-cfn=(3)
-calls=130 0
-0 130
-
-fl=??
-fn=(10) pa_config_parse
-cfl=??
-cfn=(11) pa_log_level_meta
+cfn=(11) 0x00007f9428febd0a
 calls=1 0
 0 1
 
 fl=??
-fn=(12) 0x00007f83e0da5780
-0 1
-
-fl=??
-fn=(13) __gconv_open@@GLIBC_PRIVATE
+fn=(12) glLabelObjectEXT
 cfl=??
-cfn=(14) __gconv_get_alias_db@@GLIBC_PRIVATE
+cfn=(13) dlopen@@GLIBC_2.34
 calls=1 0
 0 1
 
 fl=??
-fn=(15) 0x00007f83e0da536a
+fn=(14) 0x00007f9428fe6915
 cfl=??
-cfn=(16) 0x00007f83e0daa55f
+cfn=(15) 0x00007f9428ff983f
 calls=2 0
 0 2
 
 fl=??
-fn=(17) __nss_database_lookup@GLIBC_2.2.5
-0 1
-
-fl=??
-fn=(18) drmCloseBufferHandle
-cfl=??
-cfn=(19) drmIoctl
-calls=1 0
-0 1
-
-fl=??
-fn=(8)
-cfl=??
-cfn=(20) XML_SetBillionLaughsAttackProtectionActivationThreshold
-calls=1 0
-0 1
-
-fl=??
-fn=(21) MesaGLInteropGLXExportObject
-cfl=??
-cfn=(22) glAreTexturesResidentEXT
-calls=4 0
-0 4
-
-fl=??
-fn=(23) nouveau_object_mthd
-cfl=??
-cfn=(24) drmCommandWriteRead
-calls=1 0
-0 1
-
-fl=??
-fn=(25) nouveau_drm_screen_create
-cfl=??
-cfn=(25)
-calls=83 0
-0 83
-
-fl=??
-fn=(26) 0x00007f83e0da5e7c
-cfl=??
-cfn=(12)
-calls=1 0
-0 1
-
-fl=??
-fn=(26)
-cfl=??
-cfn=(27) 0x00007f83e0da5903
-calls=1 0
-0 1
-
-fl=??
-fn=(7)
-cfl=??
-cfn=(28) xcb_poll_for_special_event
-calls=2 0
-0 2
-
-fl=??
-fn=(25)
-cfl=??
-cfn=(29) nouveau_bo_ref
-calls=1 0
-0 1
-
-fl=??
-fn=(30) 0x00007f83e0d99915
-cfl=??
-cfn=(31) 0x00007f83e0dac83f
-calls=1 0
-0 1
-
-fl=??
-fn=(32) pa_xrealloc@@PULSE_0
-cfl=??
-cfn=(33) iconv_open@@GLIBC_2.2.5
-calls=1 0
-0 1
-
-fl=??
-fn=(34) glIsTextureEXT
-cfl=??
-cfn=(21)
-calls=4 0
-0 4
-
-fl=??
-fn=(35) poll
-0 1
-
-fl=??
-fn=(7)
-cfl=??
-cfn=(36) xcb_flush
-calls=1 0
-0 1
-
-fl=??
-fn=(37) pthread_cond_signal@@GLIBC_2.3.2
-0 1
-
-fl=??
-fn=(38) qsort_r@@GLIBC_2.8
-cfl=??
-cfn=(39) mrand48_r@@GLIBC_2.2.5
-calls=1 0
-0 1
-
-fl=??
-fn=(3)
-cfl=??
-cfn=(9)
-calls=2 0
-0 2
-
-fl=??
-fn=(40) __driDriverGetExtensions_swrast
-cfl=??
-cfn=(25)
-calls=1 0
-0 1
-
-fl=??
-fn=(41) 0x00007f83e0d92bda
-cfl=??
-cfn=(42) 0x00007f83e0da6c9d
-calls=1 0
-0 1
-
-fl=??
-fn=(29)
-cfl=??
-cfn=(18)
-calls=1 0
-0 1
-
-fl=??
-fn=(39)
-cfl=??
-cfn=(39)
-calls=3 0
+fn=(16) ioctl@@GLIBC_2.2.5
 0 3
 
 fl=??
-fn=(43) _dl_find_dso_for_object@@GLIBC_PRIVATE
+fn=(17) dlmopen@@GLIBC_2.34
 cfl=??
-cfn=(44) _dl_mcount@@GLIBC_2.2.5
+cfn=(18) _dl_find_dso_for_object@@GLIBC_PRIVATE
 calls=1 0
 0 1
 
 fl=??
-fn=(45) xcb_get_setup
+fn=(19) 0x00007f9428ff3c9d
 cfl=??
-cfn=(46) writev@@GLIBC_2.2.5
+cfn=(20) 0x00007f9428ffa3e3
 calls=1 0
 0 1
 
 fl=??
-fn=(3)
-cfl=??
-cfn=(34)
-calls=88 0
-0 88
-
-fl=??
-fn=(47) readdir64
-cfl=??
-cfn=(48) getdents64@@GLIBC_2.30
-calls=1 0
-0 1
-
-fl=??
-fn=(25)
-0 1
-
-fl=??
-fn=(49) nouveau_object_new
-cfl=??
-cfn=(23)
-calls=1 0
-0 1
-
-fl=??
-fn=(50) _dl_rtld_di_serinfo@@GLIBC_PRIVATE
-0 1
-
-fl=??
-fn=(31)
-cfl=??
-cfn=(51) openat64
-calls=1 0
-0 1
-
-fl=??
-fn=(52) pa_log_set_ident
-cfl=??
-cfn=(32)
-calls=1 0
-0 1
-
-fl=??
-fn=(39)
-cfl=??
-cfn=(3)
-calls=1 0
-0 1
-
-fl=??
-fn=(51)
-0 1
-
-fl=??
-fn=(42)
-cfl=??
-cfn=(53) 0x00007f83e0dad3e3
-calls=1 0
-0 1
-
-fl=??
-fn=(54) _dl_catch_exception@@GLIBC_PRIVATE
-cfl=??
-cfn=(55) dlmopen@@GLIBC_2.34
-calls=1 0
-0 1
-
-fl=??
-fn=(56) __libc_init_first@@GLIBC_2.2.5
+fn=(21) __libc_init_first@@GLIBC_2.2.5
 cfl=(1)
-cfn=(5)
+cfn=(4)
 calls=11 29
 0 11
 
 fl=??
-fn=(3)
+fn=(22) 0x00007f9428fdfb76
 cfl=??
-cfn=(57) scandirat64@@GLIBC_2.15
+cfn=(20)
+calls=2 0
+0 2
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(7)
+calls=8 0
+0 8
+
+fl=??
+fn=(23) _dl_catch_exception@@GLIBC_PRIVATE
+cfl=??
+cfn=(24) _dl_rtld_di_serinfo@@GLIBC_PRIVATE
 calls=1 0
 0 1
 
 fl=??
+fn=(12)
+0 1
+
+fl=??
 fn=(3)
+0 1
+
+fl=??
+fn=(25) __write@@GLIBC_2.2.5
+0 1
+
+fl=??
+fn=(26) pa_iochannel_free
+cfl=??
+cfn=(27) pa_idxset_isempty
+calls=1 0
+0 1
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(28) __driDriverGetExtensions_swrast
+calls=1 0
+0 1
+
+fl=??
+fn=(29) readlinkat@@GLIBC_2.4
+0 1
+
+fl=??
+fn=(3)
+cfl=??
+cfn=(30) 0x00007f9428fe109e
+calls=1 0
+0 1
+
+fl=??
+fn=(13)
+cfl=??
+cfn=(31) dlerror@GLIBC_2.2.5
+calls=1 0
+0 1
+
+fl=??
+fn=(12)
+cfl=??
+cfn=(32) XML_ParseBuffer
+calls=1 0
+0 1
+
+fl=??
+fn=(33) pa_format_info_set_prop_string_array@@PULSE_0
+cfl=??
+cfn=(34) pa_pstream_unlink
+calls=1 0
+0 1
+
+fl=??
+fn=(35) _glapi_set_warning_func
+cfl=??
+cfn=(36) __nss_database_lookup@GLIBC_2.2.5
+calls=1 0
+0 1
+
+fl=??
+fn=(12)
+cfl=??
+cfn=(8)
+calls=1 0
+0 1
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(37) tc_deletearray
+calls=1 0
+0 1
+
+fl=??
+fn=(21)
+cfl=(1)
+cfn=(4)
+calls=1 34
+0 1
+
+fl=??
+fn=(38) _dl_mcount@@GLIBC_2.2.5
+cfl=??
+cfn=(24)
+calls=1 0
 0 1
 
 fl=??
 fn=(9)
 cfl=??
-cfn=(25)
-calls=80 0
-0 80
+cfn=(39) recvmsg@@GLIBC_2.2.5
+calls=2 0
+0 2
 
 fl=??
-fn=(58) exit@@GLIBC_2.2.5
+fn=(37)
+0 1
+
+fl=??
+fn=(40) _Xlcmbstowcs
 cfl=??
-cfn=(59) erand48_r@@GLIBC_2.2.5
+cfn=(41) _XOpenLC
 calls=1 0
 0 1
 
 fl=??
-fn=(60) 0x00007f83e0dab65b
-cfl=??
-cfn=(61) 0x00007f83e0d9f1a2
-calls=1 0
+fn=(42) memcpy@GLIBC_2.2.5
 0 1
 
 fl=??
-fn=(7)
+fn=(28)
 cfl=??
-cfn=(62) pthread_mutex_lock@@GLIBC_2.2.5
-calls=1 0
-0 1
-
-fl=??
-fn=(63) pa_client_conf_load
-cfl=??
-cfn=(10)
-calls=1 0
-0 1
-
-fl=??
-fn=(14)
-cfl=??
-cfn=(14)
-calls=1 0
-0 1
-
-fl=??
-fn=(54)
-cfl=??
-cfn=(43)
+cfn=(43) nouveau_drm_screen_create
 calls=1 0
 0 1
 
 fl=??
 fn=(3)
 cfl=??
-cfn=(64) 0x00007f83e0d93fd7
-calls=2 0
-0 2
-
-fl=??
-fn=(64)
-cfl=??
-cfn=(15)
-calls=2 0
-0 2
-
-fl=??
-fn=(22)
-cfl=??
-cfn=(34)
-calls=2 0
-0 2
-
-fl=??
-fn=(56)
-cfl=??
-cfn=(58)
-calls=1 0
-0 1
-
-fl=??
-fn=(36)
-cfl=??
-cfn=(45)
-calls=1 0
-0 1
-
-fl=??
-fn=(50)
-cfl=??
-cfn=(50)
-calls=1 0
-0 1
-
-fl=??
-fn=(7)
-cfl=??
-cfn=(65) dlopen@@GLIBC_2.34
-calls=1 0
-0 1
-
-fl=??
-fn=(3)
-cfl=??
-cfn=(66) pa_context_new_with_proplist@@PULSE_0
-calls=1 0
-0 1
-
-fl=??
-fn=(20)
-0 1
-
-fl=??
-fn=(34)
-cfl=??
-cfn=(22)
-calls=84 0
-0 84
-
-fl=??
-fn=(19)
-cfl=??
-cfn=(67) ioctl@@GLIBC_2.2.5
-calls=2 0
-0 2
-
-fl=??
-fn=(7)
-cfl=??
-cfn=(9)
-calls=79 0
-0 79
-
-fl=??
-fn=(66)
-cfl=??
-cfn=(63)
-calls=1 0
-0 1
-
-fl=??
-fn=(68) __libc_start_main@GLIBC_2.2.5
-cfl=??
-cfn=(56)
-calls=98 0
-0 98
-
-fl=??
-fn=(34)
-cfl=??
-cfn=(7)
-calls=1 0
-0 1
-
-fl=??
-fn=(55)
-cfl=??
-cfn=(43)
-calls=1 0
-0 1
-
-fl=??
-fn=(59)
-cfl=??
-cfn=(69) std::deque::emplace_back
-calls=1 0
-0 1
-
-fl=??
-fn=(3)
-cfl=??
-cfn=(38)
-calls=1 0
-0 1
-
-fl=??
-fn=(70) __sched_yield@@GLIBC_2.2.5
-0 78
-
-fl=??
-fn=(33)
-cfl=??
-cfn=(13)
-calls=1 0
-0 1
-
-fl=??
-fn=(3)
-cfl=??
-cfn=(35)
-calls=1 0
-0 1
-
-fl=??
-fn=(71) 0x00007f83e0da0e39
-cfl=??
-cfn=(60)
-calls=1 0
-0 1
-
-fl=??
-fn=(72) _dl_catch_error@@GLIBC_PRIVATE
-cfl=??
-cfn=(54)
-calls=1 0
-0 1
-
-fl=??
-fn=(48)
-0 1
+cfn=(44) glIsTextureEXT
+calls=143 0
+0 143
 
 fl=??
 fn=(43)
 cfl=??
-cfn=(54)
+cfn=(45) nouveau_pushbuf_kick
+calls=3 0
+0 3
+
+fl=??
+fn=(43)
+cfl=??
+cfn=(43)
+calls=139 0
+0 139
+
+fl=??
+fn=(3)
+cfl=??
+cfn=(46) _XimOpenIM
 calls=1 0
 0 1
 
 fl=??
-fn=(9)
-0 2
-
-fl=??
-fn=(67)
-0 2
-
-fl=??
-fn=(2)
+fn=(47) _XimLocalOpenIM
 cfl=??
-cfn=(2)
+cfn=(48) _XimLcctstowcs
 calls=1 0
 0 1
 
 fl=??
-fn=(73) dlerror@GLIBC_2.2.5
+fn=(12)
 cfl=??
-cfn=(72)
-calls=1 0
-0 1
+cfn=(7)
+calls=135 0
+0 135
 
 fl=??
-fn=(74) 0x00007f83e0d92fb6
+fn=(49) 0x00007f9428ff98a3
 cfl=??
-cfn=(41)
-calls=1 0
-0 1
-
-fl=??
-fn=(25)
-cfl=??
-cfn=(70)
-calls=78 0
-0 78
-
-fl=??
-fn=(50)
-cfl=??
-cfn=(54)
-calls=1 0
-0 1
-
-fl=??
-fn=(2)
-cfl=??
-cfn=(3)
-calls=5 0
-0 5
-
-fl=??
-fn=(54)
-cfl=??
-cfn=(50)
+cfn=(50) 0x00007f9428febfe2
 calls=1 0
 0 1
 
 fl=??
 fn=(27)
 cfl=??
-cfn=(75) 0x00007f83e0d99632
+cfn=(51) pa_mainloop_wakeup@@PULSE_0
+calls=1 0
+0 1
+
+fl=??
+fn=(20)
+cfl=??
+cfn=(14)
+calls=4 0
+0 4
+
+fl=??
+fn=(39)
+0 2
+
+fl=??
+fn=(52) nouveau_object_mthd
+cfl=??
+cfn=(53) drmCommandWriteRead
 calls=1 0
 0 1
 
 fl=??
 fn=(3)
 cfl=??
-cfn=(76) 0x00007f83e0d991e4
+cfn=(54) glXQueryContext
 calls=1 0
 0 1
 
 fl=??
-fn=(56)
-cfl=(1)
-cfn=(5)
-calls=86 31
-0 86
-
-fl=??
-fn=(61)
-0 1
-
-fl=??
-fn=(45)
+fn=(41)
 cfl=??
-cfn=(45)
-calls=2 0
-0 2
-
-fl=??
-fn=(57)
-cfl=??
-cfn=(47)
-calls=1 0
-0 1
-
-fl=??
-fn=(16)
-cfl=??
-cfn=(26)
-calls=2 0
-0 2
-
-fl=??
-fn=(25)
-cfl=??
-cfn=(49)
-calls=1 0
-0 1
-
-fl=??
-fn=(9)
-cfl=??
-cfn=(40)
-calls=1 0
-0 1
-
-fl=??
-fn=(75)
-cfl=??
-cfn=(71)
-calls=1 0
-0 1
-
-fl=??
-fn=(44)
-cfl=??
-cfn=(50)
-calls=1 0
-0 1
-
-fl=??
-fn=(7)
-cfl=??
-cfn=(7)
-calls=10 0
-0 10
-
-fl=??
-fn=(69)
-cfl=??
-cfn=(69)
-calls=1 0
-0 1
-
-fl=??
-fn=(45)
-cfl=??
-cfn=(6)
-calls=1 0
-0 1
-
-fl=??
-fn=(77) pthread_mutexattr_settype@GLIBC_2.2.5
-cfl=??
-cfn=(14)
+cfn=(55) _XlcMapOSLocaleName
 calls=1 0
 0 1
 
 fl=??
 fn=(53)
 cfl=??
-cfn=(30)
+cfn=(56) drmIoctl
+calls=3 0
+0 3
+
+fl=??
+fn=(57) nouveau_pushbuf_data
+cfl=??
+cfn=(58) nouveau_bo_ref
 calls=1 0
 0 1
 
 fl=??
-fn=(11)
+fn=(44)
 cfl=??
-cfn=(78) pa_log_levelv_meta
+cfn=(12)
 calls=1 0
 0 1
 
 fl=??
-fn=(22)
-cfl=??
-cfn=(9)
-calls=2 0
-0 2
+fn=(59) __sched_yield@@GLIBC_2.2.5
+0 128
 
 fl=??
-fn=(45)
+fn=(43)
 cfl=??
-cfn=(37)
+cfn=(59)
+calls=128 0
+0 128
+
+fl=??
+fn=(43)
+cfl=??
+cfn=(60) nouveau_object_new
 calls=1 0
 0 1
 
 fl=??
-fn=(14)
+fn=(61) glXGetCurrentContext
 cfl=??
-cfn=(77)
+cfn=(62) __glDispatchMakeCurrent
 calls=1 0
 0 1
 
 fl=??
-fn=(34)
-0 1
-
-fl=??
-fn=(14)
-cfl=??
-cfn=(17)
-calls=1 0
-0 1
-
-fl=??
-fn=(24)
+fn=(63) 0x00007f9428fdfbda
 cfl=??
 cfn=(19)
 calls=1 0
 0 1
 
 fl=??
-fn=(28)
+fn=(23)
 cfl=??
-cfn=(45)
+cfn=(17)
+calls=1 0
+0 1
+
+fl=??
+fn=(50)
+cfl=??
+cfn=(29)
+calls=1 0
+0 1
+
+fl=??
+fn=(44)
+cfl=??
+cfn=(7)
+calls=1 0
+0 1
+
+fl=??
+fn=(64) XML_SetBillionLaughsAttackProtectionActivationThreshold
+0 1
+
+fl=??
+fn=(65) pa_write
+cfl=??
+cfn=(25)
+calls=1 0
+0 1
+
+fl=??
+fn=(36)
+0 1
+
+fl=??
+fn=(66) __libc_start_main@GLIBC_2.2.5
+cfl=??
+cfn=(21)
+calls=153 0
+0 153
+
+fl=??
+fn=(12)
+cfl=??
+cfn=(67) xcb_poll_for_special_event
 calls=2 0
 0 2
 
 fl=??
-fn=(78)
+fn=(9)
 cfl=??
-cfn=(52)
+cfn=(68) writev@@GLIBC_2.2.5
 calls=1 0
 0 1
 
 fl=??
-fn=(69)
-0 1
-
-fl=??
-fn=(52)
+fn=(55)
 cfl=??
-cfn=(52)
+cfn=(42)
 calls=1 0
 0 1
 
 fl=??
-fn=(65)
+fn=(69) __close@@GLIBC_2.2.5
+0 1
+
+fl=??
+fn=(31)
 cfl=??
-cfn=(73)
+cfn=(70) _dl_catch_error@@GLIBC_PRIVATE
 calls=1 0
 0 1
 
 fl=??
-fn=(22)
+fn=(44)
+cfl=??
+cfn=(71) glAreTexturesResidentEXT
+calls=139 0
+0 139
+
+fl=??
+fn=(24)
+cfl=??
+cfn=(24)
+calls=1 0
+0 1
+
+fl=??
+fn=(58)
+0 1
+
+fl=??
+fn=(72) pa_context_unref@@PULSE_0
+cfl=??
+cfn=(33)
+calls=1 0
+0 1
+
+fl=??
+fn=(73) 0x00007f9428fdffb6
+cfl=??
+cfn=(22)
+calls=2 0
+0 2
+
+fl=??
+fn=(34)
+cfl=??
+cfn=(26)
+calls=1 0
+0 1
+
+fl=??
+fn=(74) _glapi_get_proc_address
+cfl=??
+cfn=(35)
+calls=1 0
+0 1
+
+fl=??
+fn=(3)
 cfl=??
 cfn=(7)
-calls=84 0
-0 84
+calls=2 0
+0 2
 
 fl=??
-fn=(76)
+fn=(75) openat64
+0 2
+
+fl=??
+fn=(76) 0x00007f9428fe61e4
+cfl=??
+cfn=(73)
+calls=3 0
+0 3
+
+fl=??
+fn=(67)
+cfl=??
+cfn=(9)
+calls=2 0
+0 2
+
+fl=??
+fn=(3)
+cfl=??
+cfn=(76)
+calls=3 0
+0 3
+
+fl=??
+fn=(23)
+cfl=??
+cfn=(18)
+calls=1 0
+0 1
+
+fl=??
+fn=(18)
+cfl=??
+cfn=(38)
+calls=1 0
+0 1
+
+fl=??
+fn=(12)
+cfl=??
+cfn=(12)
+calls=9 0
+0 9
+
+fl=??
+fn=(71)
+cfl=??
+cfn=(12)
+calls=140 0
+0 140
+
+fl=??
+fn=(24)
+cfl=??
+cfn=(23)
+calls=1 0
+0 1
+
+fl=??
+fn=(71)
+cfl=??
+cfn=(44)
+calls=2 0
+0 2
+
+fl=??
+fn=(3)
+cfl=??
+cfn=(72)
+calls=1 0
+0 1
+
+fl=??
+fn=(77) MesaGLInteropGLXExportObject
+cfl=??
+cfn=(71)
+calls=4 0
+0 4
+
+fl=??
+fn=(46)
+cfl=??
+cfn=(47)
+calls=1 0
+0 1
+
+fl=??
+fn=(51)
+cfl=??
+cfn=(65)
+calls=1 0
+0 1
+
+fl=??
+fn=(73)
+cfl=??
+cfn=(63)
+calls=1 0
+0 1
+
+fl=??
+fn=(70)
+cfl=??
+cfn=(23)
+calls=1 0
+0 1
+
+fl=??
+fn=(24)
+0 1
+
+fl=??
+fn=(71)
+cfl=??
+cfn=(7)
+calls=1 0
+0 1
+
+fl=??
+fn=(18)
+cfl=??
+cfn=(23)
+calls=1 0
+0 1
+
+fl=??
+fn=(15)
+cfl=??
+cfn=(75)
+calls=2 0
+0 2
+
+fl=??
+fn=(14)
+cfl=??
+cfn=(10)
+calls=1 0
+0 1
+
+fl=??
+fn=(57)
+cfl=??
+cfn=(53)
+calls=2 0
+0 2
+
+fl=??
+fn=(11)
+cfl=??
+cfn=(69)
+calls=1 0
+0 1
+
+fl=??
+fn=(2)
+cfl=??
+cfn=(3)
+calls=6 0
+0 6
+
+fl=??
+fn=(78) XML_ParserReset
+cfl=??
+cfn=(64)
+calls=1 0
+0 1
+
+fl=??
+fn=(30)
+cfl=??
+cfn=(20)
+calls=1 0
+0 1
+
+fl=??
+fn=(54)
+cfl=??
+cfn=(61)
+calls=1 0
+0 1
+
+fl=??
+fn=(57)
+cfl=??
+cfn=(57)
+calls=2 0
+0 2
+
+fl=??
+fn=(32)
+cfl=??
+cfn=(78)
+calls=1 0
+0 1
+
+fl=??
+fn=(60)
+cfl=??
+cfn=(52)
+calls=1 0
+0 1
+
+fl=??
+fn=(14)
+cfl=??
+cfn=(49)
+calls=1 0
+0 1
+
+fl=??
+fn=(78)
+cfl=??
+cfn=(78)
+calls=2 0
+0 2
+
+fl=??
+fn=(43)
+0 5
+
+fl=??
+fn=(44)
+cfl=??
+cfn=(77)
+calls=4 0
+0 4
+
+fl=??
+fn=(9)
+cfl=??
+cfn=(9)
+calls=2 0
+0 2
+
+fl=??
+fn=(56)
+cfl=??
+cfn=(16)
+calls=3 0
+0 3
+
+fl=??
+fn=(48)
+cfl=??
+cfn=(40)
+calls=1 0
+0 1
+
+fl=??
+fn=(21)
+cfl=(1)
+cfn=(4)
+calls=141 31
+0 141
+
+fl=??
+fn=(62)
+cfl=??
+cfn=(79) _glapi_tls_Current
+calls=1 0
+0 1
+
+fl=??
+fn=(79)
 cfl=??
 cfn=(74)
 calls=1 0
 0 1
 
 fl=??
-fn=(46)
-0 1
+fn=(3)
+cfl=??
+cfn=(3)
+calls=182 0
+0 182
 
 fl=??
-fn=(62)
+fn=(2)
+cfl=??
+cfn=(2)
+calls=2 0
+0 2
+
+fl=??
+fn=(45)
+cfl=??
+cfn=(57)
+calls=3 0
+0 3
+
+fl=??
+fn=(7)
+cfl=??
+cfn=(43)
+calls=136 0
+0 136
+
+fl=??
+fn=(68)
 0 1
 
