@@ -22,6 +22,7 @@ class Game_Loop{
         SDL_Event event;
 
         bool running; //If set to false, this will end the 3D engine during the next engine_update()
-        
+        const int JOYSTICK_DEAD_ZONE = 8000;
+        SDL_Joystick* gGameController = NULL;
 };
 #endif

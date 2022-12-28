@@ -11,9 +11,21 @@ Game_Loop::Game_Loop(){
 	this->window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
 	this->renderer = SDL_CreateRenderer(window, -1, 0);
 
-
+    
 	this->running = true;
-	
+	if(SDL_NumJoysticks() <1)
+    {
+        std::cout<<"No Joysticks Found"<<std::endl;
+    }
+    else
+    {
+        gGameController = SDL_JoystickOpen(0);
+        if (gGameController == NULL)
+        {
+            std::cout << "Warning: Unable to open game controller!  SDL Error: " << SDL_GetError() << std::endl;
+            
+        }
+    }
 }
 
 bool Game_Loop::isRunning(){
