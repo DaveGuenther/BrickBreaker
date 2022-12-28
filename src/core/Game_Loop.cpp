@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
+#include <iostream>
 #include <memory>
 
 #include "../core/Game_Loop.h"
@@ -25,6 +27,10 @@ void Game_Loop::update(){
                 {
                 case SDL_QUIT:
                     this->running = false;
+                    break;
+
+                case SDL_JOYBUTTONDOWN:
+                    std::cout<<"Joystick Event from ID: " << this->event.jbutton.which << " and the button pressed is: " << this->event.jbutton.button << std::endl;
                     break;
 
                 case SDL_KEYDOWN:
