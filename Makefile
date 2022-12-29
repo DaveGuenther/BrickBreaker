@@ -1,14 +1,18 @@
 
+# SDL Flags
+SDL_CFLAGS := $(shell sdl2-config --cflags)
+SDL_LDFLAGS := $(shell sdl2-config --libs)
+
 # Compiler settings 
 CC = clang++
 
 ifeq ($(OS), Windows_NT)
-	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ 
-	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -lSDL2main -lSDL2 -lSDL2_image -static-libstdc++
+	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
+	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -static-libstdc++ $(SDL_LDFLAGS) -lSDL2_image
 	BUILD = build/win32
 else
-	CXXFLAGS = -c -std=c++17 -Wall -I /usr/include/SDL2
-	LDFLAGS = -lstdc++fs -lSDL2main -lSDL2 -lSDL2_image -static-libstdc++
+	CXXFLAGS = -c -std=c++17 -Wall $(SDL_CFLAGS)
+	LDFLAGS = -static-libstdc++ $(SDL_LDFLAGS) -lSDL2_image
 	BUILD = build/linux
 endif	
 
