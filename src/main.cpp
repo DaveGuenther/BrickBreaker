@@ -20,6 +20,7 @@ int main(int argv, char** args)
 	std::cout<<"Hello SDL World!" << std::endl;
 	Game_Loop my_Game_Loop;
 	while(my_Game_Loop.isRunning()){
+		std::cout << "Starting Main Loop" << std::endl;
 		my_Game_Loop.update();
 	}
 	

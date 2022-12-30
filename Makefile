@@ -7,11 +7,11 @@ SDL_LDFLAGS := $(shell sdl2-config --libs)
 CC = clang++
 
 ifeq ($(OS), Windows_NT)
-	CXXFLAGS = -c -std=c++17 -Wall -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
+	CXXFLAGS = -c -std=c++11 -Wall -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
 	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -static-libstdc++ $(SDL_LDFLAGS) -lSDL2_image
 	BUILD = build/win32
 else
-	CXXFLAGS = -c -std=c++17 -Wall $(SDL_CFLAGS)
+	CXXFLAGS = -c -std=c++11 -Wall $(SDL_CFLAGS)
 	LDFLAGS = -static-libstdc++ $(SDL_LDFLAGS) -lSDL2_image
 	BUILD = build/linux
 endif	
@@ -81,7 +81,7 @@ remove-executable:
 $(BUILD)/game: $(OBJ_LIST)
 	$(info )
 	$(info ***** Linking objects and building target *****)
-	$(CC) -std=c++17 -Wall -g $(OBJ_LIST) -o $(BUILD)/$(APPNAME) $(LDFLAGS)
+	$(CC) -std=c++11 -Wall -g $(OBJ_LIST) -o $(BUILD)/$(APPNAME) $(LDFLAGS)
 
 
 $(OBJ)/game.o: $(SRC)/main.cpp $(SRC)/core/Game_Loop.cpp $(SRC)/core/Game_Loop.h  

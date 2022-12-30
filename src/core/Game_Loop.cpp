@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_video.h>
 #include <iostream>
 #include <memory>
 
@@ -8,7 +9,7 @@
 Game_Loop::Game_Loop(){
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	this->window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+	this->window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, SDL_WINDOW_FULLSCREEN);
 	this->renderer = SDL_CreateRenderer(window, -1, 0);
 
     
@@ -33,8 +34,10 @@ bool Game_Loop::isRunning(){
 }
 
 void Game_Loop::update(){
+    std::cout << "Polling for events" << std::endl;
     while (SDL_PollEvent(&this->event))
             {
+                std::cout << "Event Detected" << std::endl;
                 switch (this->event.type)
                 {
                 case SDL_QUIT:
@@ -52,10 +55,11 @@ void Game_Loop::update(){
                     }
                 }
             }
-
+            std::cout << "Clearing Renderer" << std::endl;
             SDL_RenderClear(this->renderer);
+            std::cout << "setting color red" << std::endl;
             SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255);
-
+            std::cout << "flip frame buffer" << std::endl;
             SDL_RenderPresent(this->renderer);
 }
 
