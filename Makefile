@@ -12,7 +12,7 @@ ifeq ($(OS), Windows_NT)
 	BUILD = build/win32
 else
 	CXXFLAGS = -c -std=c++11 -Wall $(SDL_CFLAGS)
-	LDFLAGS = $(SDL_LDFLAGS) -lSDL2_image
+	LDFLAGS = $(SDL_LDFLAGS)
 	BUILD = build/linux
 endif	
 
@@ -87,7 +87,6 @@ $(BUILD)/game: $(OBJ_LIST)
 $(OBJ)/game.o: $(SRC)/main.cpp $(SRC)/core/Game_Loop.cpp $(SRC)/core/Game_Loop.h  
 	$(info )
 	$(info ***** Building game.o *****)
-	echo $(OS)
 	$(CC) $(CXXFLAGS) $(SRC)/main.cpp -o $(OBJ)/game.o
 
 
