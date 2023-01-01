@@ -12,7 +12,7 @@ ifeq ($(OS), Windows_NT)
 	BUILD = build/win32
 else
 	CXXFLAGS = -c -std=c++11 -Wall $(SDL_CFLAGS)
-	LDFLAGS = -static-libstdc++ $(SDL_LDFLAGS) -lSDL2_image
+	LDFLAGS = $(SDL_LDFLAGS) -lSDL2_image
 	BUILD = build/linux
 endif	
 

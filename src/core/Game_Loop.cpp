@@ -34,10 +34,10 @@ bool Game_Loop::isRunning(){
 }
 
 void Game_Loop::update(){
-    std::cout << "Polling for events" << std::endl;
+    //std::cout << "Polling for events" << std::endl;
     while (SDL_PollEvent(&this->event))
             {
-                std::cout << "Event Detected" << std::endl;
+                //std::cout << "Event Detected" << std::endl;
                 switch (this->event.type)
                 {
                 case SDL_QUIT:
@@ -55,11 +55,11 @@ void Game_Loop::update(){
                     }
                 }
             }
-            std::cout << "Clearing Renderer" << std::endl;
+            //std::cout << "Clearing Renderer" << std::endl;
             SDL_RenderClear(this->renderer);
-            std::cout << "setting color red" << std::endl;
+            //std::cout << "setting color red" << std::endl;
             SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255);
-            std::cout << "flip frame buffer" << std::endl;
+            //std::cout << "flip frame buffer" << std::endl;
             SDL_RenderPresent(this->renderer);
 }
 
