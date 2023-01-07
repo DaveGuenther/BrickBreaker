@@ -20,11 +20,12 @@ endif
 APPNAME = game
 SRC = src
 OBJ = obj
-#BUILD = build
 
-OBJ_LIST = $(OBJ)/game.o $(OBJ_root_LIST) $(OBJ_core_LIST)  
+
+OBJ_LIST = $(OBJ)/game.o $(OBJ_root_LIST) $(OBJ_core_LIST) $(OBJ_texture_LIST)
 OBJ_root_LIST= $(OBJ)/preprocessor.o $(OBJ)/Globals.o 
 OBJ_core_LIST= $(OBJ)/Game_Loop.o 
+OBJ_texture_LIST= $(OBJ)/Texture.o
 
 all: release
 
@@ -108,3 +109,8 @@ $(OBJ)/preprocessor.o: $(SRC)/preprocessor.cpp
 	$(info ***** Building Crossplatform Preprocessor (preprocessor.o) *****)
 	$(CC) $(CXXFLAGS) $(SRC)/preprocessor.cpp -o $(OBJ)/preprocessor.o
 
+Texture_SRC = $(SRC)/texture/Texture.cpp $(SRC)/texture/Texture.h
+$(OBJ)/Texture.o: $(Texture_SRC)
+	$(info )
+	$(info ***** Building texture.o *****)
+	$(CC) $(CXXFLAGS) $(SRC)/texture/Texture.cpp -o $(OBJ)/Texture.o

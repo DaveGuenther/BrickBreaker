@@ -1,17 +1,19 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_video.h>
 #include <iostream>
 #include <memory>
 
-#include "../core/Game_Loop.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_video.h>
+
+#include "../3rd_party/SDL_stbimage.h" // Used for loading .png files as surface
+#include "Game_Loop.h"
 
 Game_Loop::Game_Loop(){
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	this->window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, SDL_WINDOW_FULLSCREEN);
-	this->renderer = SDL_CreateRenderer(window, -1, 0);
-
+	//this->renderer = SDL_CreateRenderer(window, -1, 0);
+    this->screen = SDL_GetWindowSurface(this->window);
     
 	this->running = true;
 	if(SDL_NumJoysticks() <1)
@@ -27,6 +29,19 @@ Game_Loop::Game_Loop(){
             
         }
     }
+}
+
+SDL_Surface* yourFunction(const char* imageFilePath)
+{
+SDL_Surface* surf = STBIMG_Load(imageFilePath);
+if(surf == NULL) {
+    printf("ERROR: Couldn't load %s, reason: %s\n", imageFilePath, SDL_GetError());
+    exit(1);
+}
+
+// ... do something with surf ...
+
+SDL_FreeSurface(surf);
 }
 
 bool Game_Loop::isRunning(){
@@ -55,18 +70,19 @@ void Game_Loop::update(){
                     }
                 }
             }
+
             //std::cout << "Clearing Renderer" << std::endl;
-            SDL_RenderClear(this->renderer);
+            //SDL_RenderClear(this->renderer);
             //std::cout << "setting color red" << std::endl;
-            SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255);
+            //SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255);
             //std::cout << "flip frame buffer" << std::endl;
-            SDL_RenderPresent(this->renderer);
+            //SDL_RenderPresent(this->renderer);
 }
 
 void Game_Loop::shutDown(){
 
 
-	SDL_DestroyRenderer(this->renderer);
+	//SDL_DestroyRenderer(this->renderer);
 	SDL_DestroyWindow(this->window);
 	SDL_Quit();
 }
