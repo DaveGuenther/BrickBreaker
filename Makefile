@@ -8,7 +8,7 @@ CC = clang++
 
 ifeq ($(OS), Windows_NT)
 	CXXFLAGS = -c -std=c++11 -Wall -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
-	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -static-libstdc++ $(SDL_LDFLAGS) -lSDL2_image
+	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -static-libstdc++ $(SDL_LDFLAGS)
 	BUILD = build/win32
 else
 	CXXFLAGS = -c -std=c++11 -Wall $(SDL_CFLAGS)
