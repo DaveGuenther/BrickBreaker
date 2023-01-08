@@ -1,3 +1,6 @@
+#define SDL_STBIMAGE_IMPLEMENTATION
+#include "../3rd_party/SDL_stbimage.h"
+
 #include "Texture.h"
 
 Texture::Texture(const char* imageFilePath){

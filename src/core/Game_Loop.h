@@ -4,6 +4,8 @@
 #include <memory>
 #include <SDL2/SDL.h>
 
+#include "../texture/Texture.h"
+
 class Game_Loop{
     public:
         Game_Loop(void);
@@ -21,7 +23,7 @@ class Game_Loop{
         SDL_Renderer *renderer;
         SDL_Event event;
         SDL_Surface *screen;
-        SDL_Surface *image;
+        std::unique_ptr<Texture> png_image;
         bool running; //If set to false, this will end the 3D engine during the next engine_update()
         const int JOYSTICK_DEAD_ZONE = 8000;
         SDL_Joystick* gGameController = NULL;

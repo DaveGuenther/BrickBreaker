@@ -1,3 +1,4 @@
+#include <SDL2/SDL_surface.h>
 #include <iostream>
 #include <memory>
 
@@ -5,16 +6,18 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_video.h>
 
-#include "../3rd_party/SDL_stbimage.h" // Used for loading .png files as surface
+
 #include "Game_Loop.h"
+#include "../texture/Texture.h"
 
 Game_Loop::Game_Loop(){
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	this->window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, SDL_WINDOW_FULLSCREEN);
+	this->window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, SDL_WINDOW_SHOWN);
 	//this->renderer = SDL_CreateRenderer(window, -1, 0);
     this->screen = SDL_GetWindowSurface(this->window);
-    
+    std::unique_ptr<Texture> temp_texture(new Texture("assets/sdl_logo.png"));
+    this->png_image=std::move(temp_texture);
 	this->running = true;
 	if(SDL_NumJoysticks() <1)
     {
@@ -29,19 +32,6 @@ Game_Loop::Game_Loop(){
             
         }
     }
-}
-
-SDL_Surface* yourFunction(const char* imageFilePath)
-{
-SDL_Surface* surf = STBIMG_Load(imageFilePath);
-if(surf == NULL) {
-    printf("ERROR: Couldn't load %s, reason: %s\n", imageFilePath, SDL_GetError());
-    exit(1);
-}
-
-// ... do something with surf ...
-
-SDL_FreeSurface(surf);
 }
 
 bool Game_Loop::isRunning(){
@@ -70,19 +60,21 @@ void Game_Loop::update(){
                     }
                 }
             }
-
+            SDL_BlitSurface(this->png_image->getSurface(),NULL,screen,NULL);
             //std::cout << "Clearing Renderer" << std::endl;
             //SDL_RenderClear(this->renderer);
             //std::cout << "setting color red" << std::endl;
             //SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255);
             //std::cout << "flip frame buffer" << std::endl;
             //SDL_RenderPresent(this->renderer);
+            SDL_UpdateWindowSurface(window);
 }
 
 void Game_Loop::shutDown(){
 
 
 	//SDL_DestroyRenderer(this->renderer);
+
 	SDL_DestroyWindow(this->window);
 	SDL_Quit();
 }

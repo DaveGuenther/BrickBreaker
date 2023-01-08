@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_surface.h>
-#include "../3rd_party/SDL_stbimage.h"
+
 
 
 class Texture{
@@ -18,6 +18,5 @@ class Texture{
         SDL_Surface *image;
 
 };
-
 
 #endif
