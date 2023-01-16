@@ -4,14 +4,16 @@ SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs)
 
 # Compiler settings 
-CC = clang++
+CC = clang++  # either g++ or clang++
 
 ifeq ($(OS), Windows_NT)
-	CXXFLAGS = -c -std=c++11 -Wall -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
+	BASE_CXXFLAGS = -std=c++11 -Wall
+	CXXFLAGS = -c $(BASE_CXXFLAGS) -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
 	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -static-libstdc++ $(SDL_LDFLAGS)
 	BUILD = build/win32
 else
-	CXXFLAGS = -c -std=c++11 -Wall $(SDL_CFLAGS)
+	BASE_CXXFLAGS = -std=c++11 -Wall
+	CXXFLAGS = -c $(BASE_CXXFLAGS) $(SDL_CFLAGS)
 	LDFLAGS = $(SDL_LDFLAGS)
 	BUILD = build/linux
 endif	
@@ -55,7 +57,8 @@ prof:
 
 
 .PHONY: debug
-debug: CXXFLAGS += -O0 -fno-inline-functions -g -D_GLIBCXX_DEBUG
+debug: BASE_CXXFLAGS += -g
+debug: CXXFLAGS += -O0 -fno-inline-functions -D_GLIBCXX_DEBUG
 debug: $(BUILD)/game
 
 .PHONY: clean 
@@ -82,7 +85,7 @@ remove-executable:
 $(BUILD)/game: $(OBJ_LIST)
 	$(info )
 	$(info ***** Linking objects and building target *****)
-	$(CC) -std=c++11 -Wall -g $(OBJ_LIST) -o $(BUILD)/$(APPNAME) $(LDFLAGS)
+	$(CC) $(BASE_CXXFLAGS) $(OBJ_LIST) -o $(BUILD)/$(APPNAME) $(LDFLAGS)
 
 
 $(OBJ)/game.o: $(SRC)/main.cpp $(SRC)/core/Game_Loop.cpp $(SRC)/core/Game_Loop.h  

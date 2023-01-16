@@ -3,25 +3,57 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
+    "configurations": 
+    [
         {
-            "type": "lldb",
+            "name": "GDB Linux Game Debug",
+            "type": "cppdbg",
             "request": "launch",
-            "name": "Linux Game Debug",
             "program": "${workspaceFolder}/build/linux/game",
             "args": [],
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build/linux",
-            "preLaunchTask": "Run Make (clang++)",
-            "console": "internalConsole"
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Run Make (clang++)"
         },
         {
-            "type": "lldb",
+            "name": "GDB Unit Debug",
+            "type": "cppdbg",
             "request": "launch",
-            "name": "Unit Debug",
-            "program": "${workspaceFolder}/unit_tests/${fileBasenameNoExtension}",
+            "program": "${workspaceFolder}/src/${fileBasenameNoExtension}",
             "args": [],
-            "cwd": "${workspaceFolder}/unit_tests",
-            "preLaunchTask": "Linux C/C++: clang++ build active file"
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/src",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Run Make (clang++)"
         }
     ]
 }

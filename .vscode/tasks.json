@@ -20,20 +20,19 @@
             "label": "Linux C/C++: clang++ build active file",
             "command": "/usr/bin/clang++",
             "args": [
-                "-fdiagnostics-color=always",
-                "-std=c++17",
+                "-std=c++11",
                 "-Wall",
                 "-g",
                 "${file}",
                 //utility source code
-                "${workspaceFolder}/src/utility/Vec2d.cpp",
-                "${workspaceFolder}/src/utility/Vec3d.cpp",
+                //"${workspaceFolder}/src/utility/Vec2d.cpp",
+                //"${workspaceFolder}/src/utility/Vec3d.cpp",
                 //"${workspaceFolder}/src/utility/Mesh.cpp",
                 //"${workspaceFolder}/src/utility/Mat4x4.cpp",
-                "${workspaceFolder}/src/utility/Triangle.cpp",
+                //"${workspaceFolder}/src/utility/Triangle.cpp",
                 //"${workspaceFolder}/src/utility/Mesh_Pipeline.cpp",
                 //"${workspaceFolder}/src/utility/Triangle_Modifier.cpp",
-                "${workspaceFolder}/src/utility/Vector_Math_Service.cpp",
+                //"${workspaceFolder}/src/utility/Vector_Math_Service.cpp",
                 //"${workspaceFolder}/src/utility/nonVector_Math_Service.cpp",
 
 
@@ -70,7 +69,7 @@
 
                 //materials source code
                 //"${workspaceFolder}/src/materials/MTL.cpp",
-                "${workspaceFolder}/src/materials/TexturePNG.cpp",
+                //"${workspaceFolder}/src/materials/TexturePNG.cpp",
                 //"${workspaceFolder}/src/materials/TextureList.cpp",
                 //"${workspaceFolder}/src/materials/MaterialMapper.cpp",
 
@@ -87,12 +86,14 @@
                 //"${workspaceFolder}/src/render/Renderer.cpp",
                 "-I",
                 "/usr/include/SDL2",
-                "-lstdc++fs",
-                "-lSDL2main",
-                "-lSDL2",
-                "-lSDL2_image",
+                "-D_REENTRANT",
+                "-O0",
+                "-fno-inline-functions",
+                "-D_GLIBCXX_DEBUG",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileBasenameNoExtension}",
+                "-L/usr/lib",
+                "-lSDL2"
 
             ],
             "options": {

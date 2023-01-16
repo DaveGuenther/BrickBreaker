@@ -10,6 +10,7 @@
 
 #include "Game_Loop.h"
 #include "../texture/Texture.h"
+#include "../3rd_party/bitmap_font.h"
 
 Game_Loop::Game_Loop(){
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -33,6 +34,9 @@ Game_Loop::Game_Loop(){
             
         }
     }
+
+    BitmapFont my_csv("assets/Tech_Bitmap_font.png", "assets/stone_term.csv");
+    
     
 }
 
