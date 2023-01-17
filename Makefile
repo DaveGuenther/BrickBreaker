@@ -22,12 +22,15 @@ endif
 APPNAME = game
 SRC = src
 OBJ = obj
+TEST = tests
 
 
 OBJ_LIST = $(OBJ)/game.o $(OBJ_root_LIST) $(OBJ_core_LIST) $(OBJ_texture_LIST)
 OBJ_root_LIST= $(OBJ)/preprocessor.o $(OBJ)/Globals.o 
 OBJ_core_LIST= $(OBJ)/Game_Loop.o 
 OBJ_texture_LIST= $(OBJ)/Texture.o
+
+UNIT_TEST_LIST = $(TEST)/test_bitmap_font.cpp
 
 all: release
 
@@ -60,6 +63,9 @@ prof:
 debug: BASE_CXXFLAGS += -g
 debug: CXXFLAGS += -O0 -fno-inline-functions -D_GLIBCXX_DEBUG
 debug: $(BUILD)/game
+debug: $(TEST)/test
+debug: 
+	tests/test
 
 .PHONY: clean 
 clean:
@@ -69,6 +75,7 @@ clean:
 	rm -f $(BUILD)/game.gif
 	rm -f $(BUILD)/*.prof
 	rm -f $(BUILD)/*.callgrind
+	rm -f $(TEST)/test
 
 .PHONY: copy-assets
 copy-assets:
@@ -81,6 +88,11 @@ copy-assets:
 .PHONY: remove-executable 
 remove-executable:
 	rm -f $(BUILD)/game
+
+$(TEST)/test: $(UNIT_TEST_LIST)
+	$(info )
+	$(info ***** Compiling Test Scripts *****)
+	$(CC) $(UNIT_TEST_LIST) -o $(TEST)/test
 
 $(BUILD)/game: $(OBJ_LIST)
 	$(info )
