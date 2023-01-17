@@ -62,6 +62,7 @@ prof:
 .PHONY: debug
 debug: BASE_CXXFLAGS += -g
 debug: CXXFLAGS += -O0 -fno-inline-functions -D_GLIBCXX_DEBUG
+debug: clean  # comment this out after finished with header only BitmapFont library
 debug: $(BUILD)/game
 debug: $(TEST)/test
 debug: 
