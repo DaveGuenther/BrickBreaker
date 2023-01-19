@@ -8,3 +8,7 @@ TEST_CASE("Test sample Sum function", "[default]"){
     int b = 10;
     REQUIRE(sum_nums(a, b)==15);
 }
+
+TEST_CASE("Test Glyph Class Instantiation", "[font]"){
+    
+}
