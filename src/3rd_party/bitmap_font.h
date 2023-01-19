@@ -47,34 +47,50 @@ int sum_nums(int x, int y){
 
 class Glyph{
     public:
-        Glyph(SDL_Surface this_glyph, int height, int width, int ascii_code, std::string ascii_char){
-            loadGlyph(this_glyph, height, width, ascii_code, ascii_char);
+        Glyph(SDL_Surface* font_image_surface, SDL_Rect glyph_rect, int ascii_code, std::string ascii_char){
+            loadGlyph(font_image_surface, glyph_rect, ascii_code, ascii_char);
         }
-        void loadGlyph(SDL_Surface this_glyph, int height, int width, int ascii_code, std::string ascii_char){
-            this->glyph_surface = this_glyph;
+        ~Glyph(){
+            SDL_FreeSurface(this->glyph_surface);
+        }
+        
+        void loadGlyph(SDL_Surface* font_image_surface, SDL_Rect glyph_rect, int ascii_code, std::string ascii_char){
+            this->glyph_rect = glyph_rect;
+            this->glyph_surface = SDL_CreateRGBSurface(0,glyph_rect.w,glyph_rect.h,32,0,0,0,0);
+            SDL_Rect dest_rect;
+            dest_rect.x=0;
+            dest_rect.y=0;
+            dest_rect.w=glyph_rect.w;
+            dest_rect.h=glyph_rect.h;
+            SDL_BlitSurface(font_image_surface,&glyph_rect,this->glyph_surface,&dest_rect);
             this->height = height;
             this->width = width;
             this->ascii_code = ascii_code;
             this->ascii_char = ascii_char;
         }
 
-        const SDL_Surface& getSurface(){
+
+        const SDL_Surface* getGlyphSurface(){
             return this->glyph_surface;
         }
 
-        const std::string& getASCII_Char(){
+        const SDL_Rect& getGlyphRect(){
+            return this->glyph_rect;
+        }
+
+        const std::string& getGlyphASCII_Char(){
             return this->ascii_char;
         }
 
-        const int& getASCII_Code(){
+        const int& getGlyphASCII_Code(){
             return this->ascii_code;
         }
 
-        const int& getWidth(){
+        const int& getGlyphWidth(){
             return this->width;
         }
 
-        const int& getHeight(){
+        const int& getGlyphHeight(){
             return this->height;
         }
 
@@ -83,7 +99,8 @@ class Glyph{
         int ascii_code;
         int width;
         int height;
-        SDL_Surface glyph_surface;
+        SDL_Rect glyph_rect;
+        SDL_Surface *glyph_surface;
 };
 
 class CSV_Object{
