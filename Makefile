@@ -63,6 +63,7 @@ prof:
 debug: BASE_CXXFLAGS += -g
 debug: CXXFLAGS += -O0 -fno-inline-functions -D_GLIBCXX_DEBUG
 debug: clean  # comment this out after finished with header only BitmapFont library
+debug: copy-assets 
 debug: $(BUILD)/game
 debug: $(TEST)/test
 debug: 
@@ -93,7 +94,8 @@ remove-executable:
 $(TEST)/test: $(UNIT_TEST_LIST)
 	$(info )
 	$(info ***** Compiling Test Scripts *****)
-	$(CC) $(UNIT_TEST_LIST) -o $(TEST)/test
+	$(CC) $(UNIT_TEST_LIST) -o $(TEST)/test $(SDL_LDFLAGS) $(LDFLAGS)
+
 
 $(BUILD)/game: $(OBJ_LIST)
 	$(info )
