@@ -121,11 +121,12 @@ class CSV_Object{
                 while(getline(csv_file, line))
                 {
                     row.clear();
-
+                    this->rows++;
                     std::stringstream str(line);
-
+                    this->columns=0;
                     while(getline(str, word, ','))
                         row.push_back(word);
+                        this->columns++;
                     this->CSV_data.push_back(row);
                 }
             }
@@ -137,8 +138,18 @@ class CSV_Object{
             return this->CSV_data;
         }
 
+        const int& getNumRows(){
+            return this->CSV_data.size();
+        }
+
+        const int& getNumColumns(){
+            return this->CSV_data[0].size();
+        }
+
     private:
         std::vector<std::vector<std::string>> CSV_data;
+        int rows=0;
+        int columns=0;
 };
 
 class BitmapFont{
@@ -149,9 +160,9 @@ class BitmapFont{
 
             
 
-            for(int i=0;i<font_CSV.getData().size();i++)
+            for(int i=0;i<font_CSV.getNumRows();i++)
             {
-                for(int j=0;j<3;j++) // Find a way to access number of columns, don't hardcode to 3 forever
+                for(int j=0;j<font_CSV.getNumColumns();j++) // Find a way to access number of columns, don't hardcode to 3 forever
                 {
                     std::cout<<font_CSV.getData()[i][j]<<" ";
                 }
