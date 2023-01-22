@@ -94,7 +94,7 @@ remove-executable:
 $(TEST)/test: $(UNIT_TEST_LIST)
 	$(info )
 	$(info ***** Compiling Test Scripts *****)
-	$(CC) $(UNIT_TEST_LIST) -o $(TEST)/test $(SDL_LDFLAGS) $(LDFLAGS)
+	$(CC) $(UNIT_TEST_LIST) $(OBJ)/Texture.o -o $(TEST)/test $(LDFLAGS)
 
 
 $(BUILD)/game: $(OBJ_LIST)

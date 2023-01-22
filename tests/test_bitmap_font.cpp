@@ -17,7 +17,7 @@ TEST_CASE("Test sample Sum function", "[default]"){
 
 TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     SDL_Init(SDL_INIT_EVERYTHING);
-    std::unique_ptr<Texture> temp_texture(new Texture("../assets/stone_term.png"));
+    std::unique_ptr<Texture> temp_texture(new Texture("assets/stone_term.png"));
     std::unique_ptr<Texture> png_image;
     png_image=std::move(temp_texture);
     SDL_Surface* this_font = png_image->getSurface();

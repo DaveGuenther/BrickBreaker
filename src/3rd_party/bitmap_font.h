@@ -151,7 +151,7 @@ class BitmapFont{
 
             for(int i=0;i<font_CSV.getData().size();i++)
             {
-                for(int j=0;j<font_CSV.getData().size();j++)
+                for(int j=0;j<3;j++) // Find a way to access number of columns, don't hardcode to 3 forever
                 {
                     std::cout<<font_CSV.getData()[i][j]<<" ";
                 }
