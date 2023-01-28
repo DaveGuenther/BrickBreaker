@@ -33,6 +33,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 #include <memory>
 #include <stdexcept>
 
@@ -107,6 +108,12 @@ class CSV_Object{
     public:
         CSV_Object(std::string csv_font_map_fname){
             this->CSV_Load(csv_font_map_fname);
+            int i=0;
+            for (std::string key:this->CSV_data[0])
+            {
+                this->column_names.insert({key,i});
+                i++;
+            }
         }
 
         void CSV_Load(std::string csv_font_map_fname){
@@ -146,8 +153,18 @@ class CSV_Object{
             return this->CSV_data[0].size();
         }
 
+        const auto& at(std::string column_name, int row_num){
+            if (column_name=="ASCII_chr") {
+                return std::string(this->CSV_data[row_num][this->column_names.at(column_name)]);
+            }
+            else{
+                return int(this->CSV_data[row_num][this->column_names.at(column_name)]);
+            }
+        }
+
     private:
         std::vector<std::vector<std::string>> CSV_data;
+        std::map<std::string, int> column_names;
         int rows=0;
         int columns=0;
 };
