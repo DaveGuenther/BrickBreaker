@@ -7,12 +7,12 @@ SDL_LDFLAGS := $(shell sdl2-config --libs)
 CC = clang++  # either g++ or clang++
 
 ifeq ($(OS), Windows_NT)
-	BASE_CXXFLAGS = -std=c++11 -Wall
+	BASE_CXXFLAGS = -std=c++14 -Wall
 	CXXFLAGS = -c $(BASE_CXXFLAGS) -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
 	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -static-libstdc++ $(SDL_LDFLAGS)
 	BUILD = build/win32
 else
-	BASE_CXXFLAGS = -std=c++11 -Wall
+	BASE_CXXFLAGS = -std=c++14 -Wall
 	CXXFLAGS = -c $(BASE_CXXFLAGS) $(SDL_CFLAGS)
 	LDFLAGS = $(SDL_LDFLAGS)
 	BUILD = build/linux

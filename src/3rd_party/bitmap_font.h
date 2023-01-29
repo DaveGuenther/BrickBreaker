@@ -111,7 +111,8 @@ class CSV_Object{
             int i=0;
             for (std::string key:this->CSV_data[0])
             {
-                this->column_names.insert({key,i});
+                this->column_names[key]=i;
+                //this->column_names.insert({key,i});
                 i++;
             }
         }
@@ -145,20 +146,21 @@ class CSV_Object{
             return this->CSV_data;
         }
 
-        const int& getNumRows(){
-            return this->CSV_data.size();
+        int getNumRows(){
+            return this->CSV_data.size()-1;
         }
 
-        const int& getNumColumns(){
+        int getNumColumns(){
             return this->CSV_data[0].size();
         }
 
-        const auto& at(std::string column_name, int row_num){
+        auto at(std::string column_name, int row_num){
+            int col_num = this->column_names.at(column_name);
             if (column_name=="ASCII_chr") {
-                return std::string(this->CSV_data[row_num][this->column_names.at(column_name)]);
+                return std::string(this->CSV_data[row_num+1][col_num]);  // Add 1 to row_num because row 0 is the column name
             }
             else{
-                return int(this->CSV_data[row_num][this->column_names.at(column_name)]);
+                return this->CSV_data[row_num+1][col_num]; // Add 1 to row_num because row 0 is the column name
             }
         }
 
@@ -186,6 +188,7 @@ class BitmapFont{
                 std::cout<<"\n";
             }
             std::cout<<"CSV Loaded"<<std::endl;
+            std::cout << font_CSV.at("Decimal",3) << std::endl;
         }
 
     private:

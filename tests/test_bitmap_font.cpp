@@ -15,6 +15,18 @@ TEST_CASE("Test sample Sum function", "[default]"){
     REQUIRE(sum_nums(a, b)==15);
 }
 
+TEST_CASE("Load Bitmap CSV","[font]"){
+    SDL_Init(SDL_INIT_EVERYTHING);
+    CSV_Object my_csv("tests/stone_term_bad.csv");
+    std::cout << my_csv.getNumColumns() << std::endl;
+    std::cout << my_csv.getNumRows() << std::endl;
+    REQUIRE(my_csv.getNumColumns()==3);
+    REQUIRE(my_csv.getNumRows()==96);
+    //REQUIRE(my_csv.at("ASCII_dec",3)==35);
+
+
+}
+
 TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     SDL_Init(SDL_INIT_EVERYTHING);
     std::unique_ptr<Texture> temp_texture(new Texture("assets/stone_term.png"));
