@@ -183,7 +183,11 @@ class CSV_Object{
          * @return Row 
          */
         Row getRowByID(int id){
-            return this->row_data[this->ascii_codes[id]];
+            if ((id>=0)&&(id<96)){            
+                return this->row_data[this->ascii_codes[id]];
+            }else{
+                throw std::out_of_range(std::string("Row index out of range.  id must be [0-95]"));
+            }                
         }
 
         /**
@@ -193,7 +197,11 @@ class CSV_Object{
          * @return Row 
          */
         Row getRowByASCII_Code(int ascii_code){
-            return this->row_data[ascii_code];
+            if ((ascii_code>=32)&&(ascii_code<128)){
+                return this->row_data[ascii_code];
+            }else{
+                throw std::out_of_range(std::string("ASCII Code out of range.  id must be [32-127]"));
+            }
         }
 
     private:

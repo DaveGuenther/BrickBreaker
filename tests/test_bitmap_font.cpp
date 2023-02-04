@@ -39,7 +39,10 @@ TEST_CASE("Load Bitmap Font CSV","[font]"){
     REQUIRE(my_CSV.getRowByASCII_Code(95).cumulativeXPos==315);
     REQUIRE(my_CSV.getRowByASCII_Code(95).ASCII_chars=="_");
 
-
+    REQUIRE_THROWS(my_CSV.getRowByID(-1).ASCII_chars); // Out of Bounds
+    REQUIRE_THROWS(my_CSV.getRowByASCII_Code(-1).ASCII_chars); // Out of Bounds
+    REQUIRE_THROWS(my_CSV.getRowByID(96).ASCII_chars); // Out of Bounds
+    REQUIRE_THROWS(my_CSV.getRowByASCII_Code(128).ASCII_chars); // Out of Bounds
 }
 
 
