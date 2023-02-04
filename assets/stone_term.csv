@@ -1,4 +1,4 @@
-﻿Decimal,Char,Width
+﻿ASCII_code,ASCII_char,Width
 32,SP,5
 33,!,5
 34,double_quote,5
