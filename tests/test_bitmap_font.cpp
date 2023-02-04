@@ -9,22 +9,39 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-TEST_CASE("Test sample Sum function", "[default]"){
-    int a = 5;
-    int b = 10;
-    REQUIRE(sum_nums(a, b)==15);
+
+
+TEST_CASE("Load Bitmap Font CSV","[font]"){
+    SDL_Init(SDL_INIT_EVERYTHING);
+    REQUIRE_THROWS(CSV_Object("tests/stone_term_bad1.csv")); // Invalid ASCII Code
+    REQUIRE_THROWS(CSV_Object("tests/stone_term_bad2.csv")); // Invalid Width
+    REQUIRE_NOTHROW(CSV_Object("assets/stone_term.csv"));
+
+    CSV_Object my_CSV("assets/stone_term.csv");
+    REQUIRE(my_CSV.getNumRows()==96);
+    REQUIRE(my_CSV.getRowByID(0).ASCII_code==32);
+    REQUIRE(my_CSV.getRowByID(0).cumulativeXPos==0);
+    REQUIRE(my_CSV.getRowByID(0).ASCII_chars=="SP");        
+    REQUIRE(my_CSV.getRowByID(1).ASCII_code==33);
+    REQUIRE(my_CSV.getRowByID(1).cumulativeXPos==5);
+    REQUIRE(my_CSV.getRowByID(1).ASCII_chars=="!");
+    REQUIRE(my_CSV.getRowByID(95).ASCII_code==127);
+    REQUIRE(my_CSV.getRowByID(95).cumulativeXPos==475);
+    REQUIRE(my_CSV.getRowByID(95).ASCII_chars=="default");
+
+    REQUIRE(my_CSV.getRowByASCII_Code(32).ASCII_code==32);
+    REQUIRE(my_CSV.getRowByASCII_Code(32).cumulativeXPos==0);
+    REQUIRE(my_CSV.getRowByASCII_Code(32).ASCII_chars=="SP");        
+    REQUIRE(my_CSV.getRowByASCII_Code(33).ASCII_code==33);
+    REQUIRE(my_CSV.getRowByASCII_Code(33).cumulativeXPos==5);
+    REQUIRE(my_CSV.getRowByASCII_Code(33).ASCII_chars=="!");
+    REQUIRE(my_CSV.getRowByASCII_Code(95).ASCII_code==95);
+    REQUIRE(my_CSV.getRowByASCII_Code(95).cumulativeXPos==315);
+    REQUIRE(my_CSV.getRowByASCII_Code(95).ASCII_chars=="_");
+
+
 }
 
-/*TEST_CASE("Load Bitmap CSV","[font]"){
-    SDL_Init(SDL_INIT_EVERYTHING);
-    CSV_Object my_csv("tests/stone_term_bad.csv");
-    std::cout << my_csv.getNumColumns() << std::endl;
-    std::cout << my_csv.getNumRows() << std::endl;
-    REQUIRE(my_csv.getNumColumns()==3);
-    REQUIRE(my_csv.getNumRows()==96);
-    //REQUIRE(my_csv.at("ASCII_dec",3)==35);
-}
-*/
 
 
 

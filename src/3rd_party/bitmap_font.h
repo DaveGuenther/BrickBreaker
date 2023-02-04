@@ -160,11 +160,12 @@ class CSV_Object{
                     if(getline(ss,str_glyph_width,',')){
                         // This last token is a width in pixels of the glyph
                         width = std::stoi(str_glyph_width);
-                        cumulative_xPos+=width;
+
                     }else{
                         throw std::runtime_error(std::string("CSV Read Error: "+ csv_font_map_fname+ ": at row "+std::to_string(rows-1)+ ". Expected int for Width column."));
                     }
                     this->row_data.insert({ascii_code,{ascii_code,str_ascii_char,cumulative_xPos,width}});
+                    cumulative_xPos+=width;                
                 }
             }
             else
