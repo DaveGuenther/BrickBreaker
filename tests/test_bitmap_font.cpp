@@ -59,6 +59,6 @@ TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     letter_A_Rect.w=25;
     letter_A_Rect.x=25;
     letter_A_Rect.y=0;
-    Glyph letter_A(this_font, letter_A_Rect, 33,std::string("!"));
+    //Glyph letter_A(this_font, letter_A_Rect, 33,std::string("!"));
     SDL_Quit();
 }

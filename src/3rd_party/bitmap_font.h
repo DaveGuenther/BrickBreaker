@@ -5,7 +5,7 @@
 * details font information).  This library depends on several other header only libraries so that SDL2_image binaries are
 * not required to run.  
 *
-* Created by: Dave Guenther 2022
+* Created by: Dave Guenther 2023
 *
 * Dependencies:
 *     libSDL2         http://www.libsdl.org
@@ -20,7 +20,8 @@
 * If you are not using stb_image.h anywhere else in your source code and this header will be the only file it, then 
 * uncomment the #define line above.
 *
-*
+* Using this header requires that you establish a renderer context and pass that into the BitmapFont class.  It won't work with rendering
+* approaches using SDL_UpdateWindowSurface(window);
 *
 */
 
@@ -41,42 +42,72 @@
 
 #include "SDL_stbimage.h" // 
 
-int sum_nums(int x, int y){
-    return x+y;
-}
+class stbimageTexture{
+    public:
+        stbimageTexture(SDL_Renderer* renderer, const char* imageFilePath){
+            this->renderer = renderer;
+            this->loadTexture(imageFilePath);
+        }
+        ~stbimageTexture(){
+            SDL_FreeSurface(this->image);
+            SDL_DestroyTexture(this->textureImage);
+        }
 
+        void loadTexture(const char* imageFilePath){
+            this->image = STBIMG_Load(imageFilePath);
+            if(image == NULL) {
+            printf("ERROR: Couldn't load %s, reason: %s\n", imageFilePath, SDL_GetError());
+            exit(1);
+            }
+            this->textureImage = SDL_CreateTextureFromSurface(this->renderer, this->image);
+        }
+
+        SDL_Surface* getSurface(){
+            return this->image;
+        }
+
+        SDL_Texture* getTexture(){
+            return this->textureImage;
+        }
+
+        SDL_Renderer* getRenderer(){
+            return this->renderer;
+        }
+
+    private:
+        SDL_Renderer *renderer;
+        SDL_Surface *image;
+        SDL_Texture *textureImage;
+
+};
 
 class Glyph{
     public:
-        Glyph(SDL_Surface* font_image_surface, SDL_Rect glyph_rect, int ascii_code, std::string ascii_char){
-            loadGlyph(font_image_surface, glyph_rect, ascii_code, ascii_char);
+        Glyph(){}
+        Glyph(std::shared_ptr<stbimageTexture> font_image_texture, SDL_Rect glyph_rect, int ascii_code, std::string ascii_char){
+            loadGlyph(font_image_texture, glyph_rect, ascii_code, ascii_char);
         }
         ~Glyph(){
-            SDL_FreeSurface(this->glyph_surface);
+            //SDL_DestroyTexture(this->glyph_texture);
+
         }
         
-        void loadGlyph(SDL_Surface* font_image_surface, SDL_Rect glyph_rect, int ascii_code, std::string ascii_char){
+        void loadGlyph(std::shared_ptr<stbimageTexture> font_image_texture, SDL_Rect glyph_rect, int ascii_code, std::string ascii_char){
             this->glyph_rect = glyph_rect;
-            this->glyph_surface = SDL_CreateRGBSurface(0,glyph_rect.w,glyph_rect.h,32,0,0,0,0);
-            SDL_Rect dest_rect;
-            dest_rect.x=0;
-            dest_rect.y=0;
-            dest_rect.w=glyph_rect.w;
-            dest_rect.h=glyph_rect.h;
-            SDL_BlitSurface(font_image_surface,&glyph_rect,this->glyph_surface,&dest_rect);
+            this->entire_font_texture = font_image_texture->getTexture();
             this->height = height;
             this->width = width;
             this->ascii_code = ascii_code;
             this->ascii_char = ascii_char;
+                     
         }
 
-
-        const SDL_Surface* getGlyphSurface(){
-            return this->glyph_surface;
+        SDL_Texture* getFontTexture(){
+            return this->entire_font_texture;
         }
 
-        const SDL_Rect& getGlyphRect(){
-            return this->glyph_rect;
+        const SDL_Rect* getGlyphOffsetRect(){
+            return &(this->glyph_rect);
         }
 
         const std::string& getGlyphASCII_Char(){
@@ -101,7 +132,7 @@ class Glyph{
         int width;
         int height;
         SDL_Rect glyph_rect;
-        SDL_Surface *glyph_surface;
+        SDL_Texture* entire_font_texture;
 };
 
 typedef struct Row{
@@ -226,6 +257,8 @@ class BitmapFont{
             }
             std::cout<<"CSV Loaded"<<std::endl;
         }
+
+      
 
     private:
         std::string bitmap_fname;
