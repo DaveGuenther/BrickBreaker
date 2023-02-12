@@ -1,3 +1,4 @@
+
 #include <SDL2/SDL_surface.h>
 #include <iostream>
 #include <memory>
@@ -7,9 +8,8 @@
 #include <SDL2/SDL_video.h>
 
 
-
 #include "Game_Loop.h"
-#include "../texture/Texture.h"
+//#include "../texture/Texture.h"
 
 
 Game_Loop::Game_Loop(){
@@ -36,9 +36,9 @@ Game_Loop::Game_Loop(){
     }
 
     BitmapFont my_csv("assets/Tech_Bitmap_font.png", "assets/stone_term.csv");
-    //std::shared_ptr<stbimageTexture> font_texture(new stbimageTexture(renderer, "assets/1st_texture.png"));
+
     this->font_image = std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, "assets/stone_term.png"));
-    //SDL_Texture* this_font = font_texture->getTexture();
+
     SDL_Rect letter_A_Rect;
     letter_A_Rect.x=25;
     letter_A_Rect.y=0;
@@ -56,9 +56,7 @@ Game_Loop::Game_Loop(){
 }
 
 Game_Loop::~Game_Loop(){
-    SDL_DestroyRenderer(this->renderer);
-    SDL_DestroyWindow(this->window);
-	SDL_Quit();    
+   
 }
 
 bool Game_Loop::isRunning(){
@@ -114,13 +112,14 @@ void Game_Loop::update(){
 
             SDL_RenderPresent(renderer);
 
-            //SDL_UpdateWindowSurface(window);
+
 }
 
 void Game_Loop::shutDown(){
 
+    SDL_DestroyRenderer(this->renderer);
+    SDL_DestroyWindow(this->window);
+	SDL_Quit(); 
 
-	//SDL_DestroyRenderer(this->renderer);
-    //SDL_FreeSurface(screen);
     std::cout << "Shutting Down from GameLoop" << std::endl;
 }

@@ -13,7 +13,7 @@
 *     SDL_stbimage.h  https://github.com/DanielGibson/Snippets/
 *
 * If you are already using stb_image.h in your source code, please ensure that this line is added somewhere (and only once) 
-* in your project source code files.
+* in your project source code files.  Your root .cpp (main.cpp) is a good option
 *
 * #define SDL_STBIMAGE_IMPLEMENTATION
 *

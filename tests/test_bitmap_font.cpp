@@ -2,8 +2,9 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 
+#define SDL_STBIMAGE_IMPLEMENTATION
 #include "../src/3rd_party/bitmap_font.h"
-#include "../src/texture/Texture.h"
+
 
 
 #define CATCH_CONFIG_MAIN

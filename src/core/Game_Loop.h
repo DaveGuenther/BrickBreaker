@@ -4,7 +4,7 @@
 #include <memory>
 #include <SDL2/SDL.h>
 
-#include "../texture/Texture.h"
+
 #include "../3rd_party/bitmap_font.h"
 
 class Game_Loop{
