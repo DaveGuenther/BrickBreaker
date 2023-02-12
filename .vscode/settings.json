@@ -67,7 +67,8 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "valarray": "cpp"
     },
     "testMate.cpp.test.executables": "${workspaceFolder}/tests/unit_tests"
 

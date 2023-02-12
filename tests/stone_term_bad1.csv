@@ -1,6 +1,6 @@
-﻿ASCII_code,ASCII_char,Width
+﻿ASCII_dec,ASCII_chr,Width
 32,SP,5
-33,!,5
+ERROR,!,5
 34,double_quote,5
 35,#,5
 36,$,5

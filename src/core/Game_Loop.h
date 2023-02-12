@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "../texture/Texture.h"
+#include "../3rd_party/bitmap_font.h"
 
 class Game_Loop{
     public:
@@ -22,8 +23,11 @@ class Game_Loop{
         SDL_Window *window;
         SDL_Renderer *renderer;
         SDL_Event event;
-        SDL_Surface *screen;
-        std::unique_ptr<Texture> png_image;
+        std::shared_ptr<stbimageTexture> png_image;
+        std::shared_ptr<stbimageTexture> font_image;
+        
+        Glyph Letter_A;
+        SDL_Rect my_rect;
         bool running; //If set to false, this will end the 3D engine during the next engine_update()
         const int JOYSTICK_DEAD_ZONE = 8000;
         SDL_Joystick* gGameController = NULL;

@@ -7,12 +7,12 @@ SDL_LDFLAGS := $(shell sdl2-config --libs)
 CC = clang++  # either g++ or clang++
 
 ifeq ($(OS), Windows_NT)
-	BASE_CXXFLAGS = -std=c++11 -Wall
+	BASE_CXXFLAGS = -std=c++14 -Wall
 	CXXFLAGS = -c $(BASE_CXXFLAGS) -I /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/include -I ./ $(SDL_CFLAGS)
 	LDFLAGS =  -L /c/SDL2/SDL2-2.26.1/x86_64-w64-mingw32/lib -static-libstdc++ $(SDL_LDFLAGS)
 	BUILD = build/win32
 else
-	BASE_CXXFLAGS = -std=c++11 -Wall
+	BASE_CXXFLAGS = -std=c++14 -Wall
 	CXXFLAGS = -c $(BASE_CXXFLAGS) $(SDL_CFLAGS)
 	LDFLAGS = $(SDL_LDFLAGS)
 	BUILD = build/linux
@@ -62,6 +62,8 @@ prof:
 .PHONY: debug
 debug: BASE_CXXFLAGS += -g
 debug: CXXFLAGS += -O0 -fno-inline-functions -D_GLIBCXX_DEBUG
+debug: clean  # comment this out after finished with header only BitmapFont library
+debug: copy-assets 
 debug: $(BUILD)/game
 debug: $(TEST)/test
 debug: 
@@ -92,7 +94,8 @@ remove-executable:
 $(TEST)/test: $(UNIT_TEST_LIST)
 	$(info )
 	$(info ***** Compiling Test Scripts *****)
-	$(CC) $(UNIT_TEST_LIST) -o $(TEST)/test
+	$(CC) $(UNIT_TEST_LIST) $(OBJ)/Texture.o -o $(TEST)/test $(LDFLAGS)
+
 
 $(BUILD)/game: $(OBJ_LIST)
 	$(info )
