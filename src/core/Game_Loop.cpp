@@ -17,9 +17,9 @@ Game_Loop::Game_Loop(){
 
 	this->window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, SDL_WINDOW_SHOWN);  //Steamdeck is 1280x800
 	this->renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    //this->screen = SDL_GetWindowSurface(this->window);
+
     this->png_image=std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, "assets/sdl_logo.png"));
-    //this->png_image=std::move(temp_texture);
+
 	this->running = true;
 	if(SDL_NumJoysticks() <1)
     {

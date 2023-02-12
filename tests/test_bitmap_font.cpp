@@ -50,15 +50,16 @@ TEST_CASE("Load Bitmap Font CSV","[font]"){
 
 TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     SDL_Init(SDL_INIT_EVERYTHING);
-    std::unique_ptr<Texture> temp_texture(new Texture("assets/stone_term.png"));
-    std::unique_ptr<Texture> png_image;
-    png_image=std::move(temp_texture);
-    SDL_Surface* this_font = png_image->getSurface();
+    SDL_Window* window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, SDL_WINDOW_SHOWN);  //Steamdeck is 1280x800
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    std::shared_ptr<stbimageTexture> entire_font_texture(new stbimageTexture(renderer, "assets/stone_term.png"));
     SDL_Rect letter_A_Rect;
     letter_A_Rect.h=50;
     letter_A_Rect.w=25;
     letter_A_Rect.x=25;
     letter_A_Rect.y=0;
-    //Glyph letter_A(this_font, letter_A_Rect, 33,std::string("!"));
-    SDL_Quit();
+    std::shared_ptr<Glyph> Glyph_A(new Glyph(entire_font_texture, letter_A_Rect, 33,std::string("!")));
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+	SDL_Quit();    
 }

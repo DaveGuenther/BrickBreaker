@@ -23,7 +23,6 @@ class Game_Loop{
         SDL_Window *window;
         SDL_Renderer *renderer;
         SDL_Event event;
-        SDL_Surface *screen;
         std::shared_ptr<stbimageTexture> png_image;
         std::shared_ptr<stbimageTexture> font_image;
         
