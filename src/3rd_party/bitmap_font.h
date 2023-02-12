@@ -95,8 +95,8 @@ class Glyph{
         void loadGlyph(std::shared_ptr<stbimageTexture> font_image_texture, SDL_Rect glyph_rect, int ascii_code, std::string ascii_char){
             this->glyph_rect = glyph_rect;
             this->entire_font_texture = font_image_texture->getTexture();
-            this->height = height;
-            this->width = width;
+            this->height = glyph_rect.h;
+            this->width = glyph_rect.w;
             this->ascii_code = ascii_code;
             this->ascii_char = ascii_char;
                      

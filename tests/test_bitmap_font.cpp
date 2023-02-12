@@ -58,7 +58,12 @@ TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     letter_A_Rect.w=25;
     letter_A_Rect.x=25;
     letter_A_Rect.y=0;
-    std::shared_ptr<Glyph> Glyph_A(new Glyph(entire_font_texture, letter_A_Rect, 33,std::string("!")));
+    std::shared_ptr<Glyph> Glyph_Exclamation(new Glyph(entire_font_texture, letter_A_Rect, 33,std::string("!")));
+    REQUIRE(Glyph_Exclamation->getGlyphHeight()==50);
+    REQUIRE(Glyph_Exclamation->getGlyphWidth()==25);
+    REQUIRE(Glyph_Exclamation->getGlyphASCII_Code()==33);
+    REQUIRE(Glyph_Exclamation->getGlyphASCII_Char()==std::string("!"));
+    
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 	SDL_Quit();    
