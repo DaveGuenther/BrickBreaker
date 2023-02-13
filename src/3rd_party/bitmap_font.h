@@ -106,7 +106,7 @@ class Glyph{
             return this->entire_font_texture;
         }
 
-        const SDL_Rect* getGlyphOffsetRect(){
+        SDL_Rect* getGlyphOffsetRect(){
             return &(this->glyph_rect);
         }
 
@@ -242,27 +242,61 @@ class CSV_Object{
         int rows=0;
 };
 
+
 class BitmapFont{
     public:
-        BitmapFont(std::string bitmap_fname, std::string csv_font_map_fname):   bitmap_fname(bitmap_fname), 
+        BitmapFont(SDL_Renderer* renderer, std::string bitmap_fname, std::string csv_font_map_fname, int height_px):   
+                                                                                renderer(renderer),
+                                                                                bitmap_fname(bitmap_fname), 
                                                                                 csv_font_map_fname(csv_font_map_fname),
-                                                                                font_CSV(CSV_Object(csv_font_map_fname)){
+                                                                                font_CSV(CSV_Object(csv_font_map_fname)),
+                                                                                glyph_height_in_pixels(height_px){
 
-            
 
-            for(int i=0;i<font_CSV.getNumRows();i++)
-            {
-                int ascii_code = font_CSV.getRowByID(i).ASCII_code;
-                std::cout << ascii_code << ", " << font_CSV.getRowByASCII_Code(ascii_code).ASCII_chars << ", " << font_CSV.getRowByASCII_Code(ascii_code).width << std::endl;
-            }
+            loadGlyphs();
             std::cout<<"CSV Loaded"<<std::endl;
         }
 
-      
+        void loadGlyphs(){
+            for(int i=0;i<this->font_CSV.getNumRows();i++)
+            {
+                int ascii_code = font_CSV.getRowByID(i).ASCII_code;
+                const char* my_c_str = this->bitmap_fname.c_str();
+                this->font_image = std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, this->bitmap_fname.c_str()));
+
+                SDL_Rect glyphRect;
+                glyphRect.x=font_CSV.getRowByASCII_Code(ascii_code).cumulativeXPos;
+                glyphRect.y=0;
+                glyphRect.h=this->glyph_height_in_pixels;
+                glyphRect.w=font_CSV.getRowByASCII_Code(ascii_code).width;
+
+                std::shared_ptr<Glyph> temp_Glyph(new Glyph(font_image, glyphRect, ascii_code,font_CSV.getRowByASCII_Code(ascii_code).ASCII_chars));                   
+                std::cout << ascii_code << ", " << font_CSV.getRowByASCII_Code(ascii_code).ASCII_chars << ", " << font_CSV.getRowByASCII_Code(ascii_code).width << std::endl;
+                alphabetGlyphs.insert({ascii_code,temp_Glyph});
+
+            }            
+        }
+
+        void placeCharAtXY(int x, int y, int ascii_code){
+            std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
+            SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
+            SDL_Rect temp_rect;
+            temp_rect.x=x;
+            temp_rect.y=y;
+            temp_rect.h=tempGlyph->getGlyphHeight();
+            temp_rect.w=tempGlyph->getGlyphWidth();
+            SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&temp_rect);
+            SDL_RenderPresent(renderer);
+
+        }
 
     private:
+        std::map<int,std::shared_ptr<Glyph>> alphabetGlyphs;
+        int glyph_height_in_pixels;
+        SDL_Renderer* renderer;
         std::string bitmap_fname;
         std::string csv_font_map_fname;
+        std::shared_ptr<stbimageTexture> font_image;
         CSV_Object font_CSV;
 
 };

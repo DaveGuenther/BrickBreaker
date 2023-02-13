@@ -24,20 +24,20 @@ TEST_CASE("Load Bitmap Font CSV","[font]"){
     REQUIRE(my_CSV.getRowByID(0).cumulativeXPos==0);
     REQUIRE(my_CSV.getRowByID(0).ASCII_chars=="SP");        
     REQUIRE(my_CSV.getRowByID(1).ASCII_code==33);
-    REQUIRE(my_CSV.getRowByID(1).cumulativeXPos==5);
+    REQUIRE(my_CSV.getRowByID(1).cumulativeXPos==25);
     REQUIRE(my_CSV.getRowByID(1).ASCII_chars=="!");
     REQUIRE(my_CSV.getRowByID(95).ASCII_code==127);
-    REQUIRE(my_CSV.getRowByID(95).cumulativeXPos==475);
+    REQUIRE(my_CSV.getRowByID(95).cumulativeXPos==2375);
     REQUIRE(my_CSV.getRowByID(95).ASCII_chars=="default");
 
     REQUIRE(my_CSV.getRowByASCII_Code(32).ASCII_code==32);
     REQUIRE(my_CSV.getRowByASCII_Code(32).cumulativeXPos==0);
     REQUIRE(my_CSV.getRowByASCII_Code(32).ASCII_chars=="SP");        
     REQUIRE(my_CSV.getRowByASCII_Code(33).ASCII_code==33);
-    REQUIRE(my_CSV.getRowByASCII_Code(33).cumulativeXPos==5);
+    REQUIRE(my_CSV.getRowByASCII_Code(33).cumulativeXPos==25);
     REQUIRE(my_CSV.getRowByASCII_Code(33).ASCII_chars=="!");
     REQUIRE(my_CSV.getRowByASCII_Code(95).ASCII_code==95);
-    REQUIRE(my_CSV.getRowByASCII_Code(95).cumulativeXPos==315);
+    REQUIRE(my_CSV.getRowByASCII_Code(95).cumulativeXPos==1575);
     REQUIRE(my_CSV.getRowByASCII_Code(95).ASCII_chars=="_");
 
     REQUIRE_THROWS(my_CSV.getRowByID(-1).ASCII_chars); // Out of Bounds
