@@ -24,10 +24,7 @@ class Game_Loop{
         SDL_Renderer *renderer;
         SDL_Event event;
         std::shared_ptr<stbimageTexture> png_image;
-        std::shared_ptr<stbimageTexture> font_image;
         std::shared_ptr<BitmapFont> myFont;
-        std::shared_ptr<Glyph> Letter_A;
-        SDL_Rect my_rect;
         bool running; //If set to false, this will end the 3D engine during the next engine_update()
         const int JOYSTICK_DEAD_ZONE = 8000;
         SDL_Joystick* gGameController = NULL;

@@ -258,12 +258,14 @@ class BitmapFont{
         }
 
         void loadGlyphs(){
+
+            this->font_image = std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, this->bitmap_fname.c_str()));
+            const char* my_c_str = this->bitmap_fname.c_str();
             for(int i=0;i<this->font_CSV.getNumRows();i++)
             {
                 int ascii_code = font_CSV.getRowByID(i).ASCII_code;
-                const char* my_c_str = this->bitmap_fname.c_str();
-                this->font_image = std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, this->bitmap_fname.c_str()));
-
+                
+                
                 SDL_Rect glyphRect;
                 glyphRect.x=font_CSV.getRowByASCII_Code(ascii_code).cumulativeXPos;
                 glyphRect.y=0;
@@ -286,7 +288,6 @@ class BitmapFont{
             temp_rect.h=tempGlyph->getGlyphHeight();
             temp_rect.w=tempGlyph->getGlyphWidth();
             SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&temp_rect);
-            SDL_RenderPresent(renderer);
 
         }
 

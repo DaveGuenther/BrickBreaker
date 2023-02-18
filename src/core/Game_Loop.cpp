@@ -37,23 +37,9 @@ Game_Loop::Game_Loop(){
 
     myFont = std::shared_ptr<BitmapFont>(new BitmapFont(this->renderer, "assets/stone_term.png", "assets/stone_term.csv",50));
 
-    this->font_image = std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, "assets/stone_term.png"));
 
-    SDL_Rect letter_A_Rect;
-    letter_A_Rect.x=25;
-    letter_A_Rect.y=0;
-    letter_A_Rect.h=50;
-    letter_A_Rect.w=25;
 
-    this->Letter_A = std::shared_ptr<Glyph>(new Glyph(font_image, letter_A_Rect, 33,std::string("!")));      
-    std::cout << "Hello!" << std::endl;
-
-    my_rect.x=100;
-    my_rect.y=100;
-    my_rect.h=200;
-    my_rect.w=100;
-
-    
+   
 }
 
 Game_Loop::~Game_Loop(){
@@ -110,7 +96,6 @@ void Game_Loop::update(){
     this->myFont->placeCharAtXY(75,50,97);
     this->myFont->placeCharAtXY(100,50,118);
     this->myFont->placeCharAtXY(125,50,101);
-    SDL_RenderCopy(renderer, this->Letter_A->getFontTexture(),this->Letter_A->getGlyphOffsetRect(),&my_rect);
 
 
     SDL_RenderPresent(renderer);
