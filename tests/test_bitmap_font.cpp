@@ -2,8 +2,9 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 
+#define SDL_STBIMAGE_IMPLEMENTATION
 #include "../src/3rd_party/bitmap_font.h"
-#include "../src/texture/Texture.h"
+
 
 
 #define CATCH_CONFIG_MAIN
@@ -23,20 +24,20 @@ TEST_CASE("Load Bitmap Font CSV","[font]"){
     REQUIRE(my_CSV.getRowByID(0).cumulativeXPos==0);
     REQUIRE(my_CSV.getRowByID(0).ASCII_chars=="SP");        
     REQUIRE(my_CSV.getRowByID(1).ASCII_code==33);
-    REQUIRE(my_CSV.getRowByID(1).cumulativeXPos==5);
+    REQUIRE(my_CSV.getRowByID(1).cumulativeXPos==25);
     REQUIRE(my_CSV.getRowByID(1).ASCII_chars=="!");
     REQUIRE(my_CSV.getRowByID(95).ASCII_code==127);
-    REQUIRE(my_CSV.getRowByID(95).cumulativeXPos==475);
+    REQUIRE(my_CSV.getRowByID(95).cumulativeXPos==2375);
     REQUIRE(my_CSV.getRowByID(95).ASCII_chars=="default");
 
     REQUIRE(my_CSV.getRowByASCII_Code(32).ASCII_code==32);
     REQUIRE(my_CSV.getRowByASCII_Code(32).cumulativeXPos==0);
     REQUIRE(my_CSV.getRowByASCII_Code(32).ASCII_chars=="SP");        
     REQUIRE(my_CSV.getRowByASCII_Code(33).ASCII_code==33);
-    REQUIRE(my_CSV.getRowByASCII_Code(33).cumulativeXPos==5);
+    REQUIRE(my_CSV.getRowByASCII_Code(33).cumulativeXPos==25);
     REQUIRE(my_CSV.getRowByASCII_Code(33).ASCII_chars=="!");
     REQUIRE(my_CSV.getRowByASCII_Code(95).ASCII_code==95);
-    REQUIRE(my_CSV.getRowByASCII_Code(95).cumulativeXPos==315);
+    REQUIRE(my_CSV.getRowByASCII_Code(95).cumulativeXPos==1575);
     REQUIRE(my_CSV.getRowByASCII_Code(95).ASCII_chars=="_");
 
     REQUIRE_THROWS(my_CSV.getRowByID(-1).ASCII_chars); // Out of Bounds
@@ -44,7 +45,6 @@ TEST_CASE("Load Bitmap Font CSV","[font]"){
     REQUIRE_THROWS(my_CSV.getRowByID(96).ASCII_chars); // Out of Bounds
     REQUIRE_THROWS(my_CSV.getRowByASCII_Code(128).ASCII_chars); // Out of Bounds
 }
-
 
 
 
@@ -64,6 +64,11 @@ TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     REQUIRE(Glyph_Exclamation->getGlyphASCII_Code()==33);
     REQUIRE(Glyph_Exclamation->getGlyphASCII_Char()==std::string("!"));
     
+    // Test the Glyph Scalar class which resized the rendering rectangle based on a provided pt value (12pt, 10pt, etc)
+    GlyphRectScalar glyph_scalar;
+    REQUIRE(glyph_scalar.getAdjGlyphHeight(12)==35);
+    REQUIRE(glyph_scalar.getAdjGlyphWidth(Glyph_Exclamation,glyph_scalar.getAdjGlyphHeight(12))==17);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 	SDL_Quit();    

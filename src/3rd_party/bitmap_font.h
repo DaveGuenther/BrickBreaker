@@ -13,7 +13,7 @@
 *     SDL_stbimage.h  https://github.com/DanielGibson/Snippets/
 *
 * If you are already using stb_image.h in your source code, please ensure that this line is added somewhere (and only once) 
-* in your project source code files.
+* in your project source code files.  Your root .cpp (main.cpp) is a good option
 *
 * #define SDL_STBIMAGE_IMPLEMENTATION
 *
@@ -106,7 +106,7 @@ class Glyph{
             return this->entire_font_texture;
         }
 
-        const SDL_Rect* getGlyphOffsetRect(){
+        SDL_Rect* getGlyphOffsetRect(){
             return &(this->glyph_rect);
         }
 
@@ -242,28 +242,120 @@ class CSV_Object{
         int rows=0;
 };
 
+
+class GlyphRectScalar{
+    public:
+        GlyphRectScalar(){
+                SDL_DisplayMode DM;
+                SDL_GetCurrentDisplayMode(0, &DM);
+                this->screen_width = float(DM.w);
+                this->screen_height = float(DM.h);
+        }
+
+        /**
+         * @brief Get the Adj Glyph Height.  Given a pt setting like in word (10pt, 12pt, etc) this function will calculate the height in pixels 
+         * that a glyph typeset will have to display properly on a steamdeck.  No glyph is required to calculate this value sonce all glyphs will 
+         * have the same height in a bitmap font.
+         * 
+         * @param pt 
+         * @return int 
+         */
+        int getAdjGlyphHeight(int pt){
+            // .352mm = physical height of 1pt font typeset
+            // 93.98mm = physical height of screen in mm
+            // 800px = vertical resolution of screen in pixels
+            
+            return std::floor(((.352*float(pt))/93.98)*800);//this->screen_height);
+        }
+
+        /**
+         * @brief Get the Adj Glyph Width.  Given a Glyph and an adjusted rendering height in pixels for the glyph (all glyphs in a font have the same vertical typeset),
+         * this function will determine the adjusted width in pixels
+         * 
+         * @param thisGlyph 
+         * @param adjusted_glyph_height 
+         * @return int
+         */
+        int getAdjGlyphWidth(std::shared_ptr<Glyph> thisGlyph, float adjusted_glyph_height){
+            return std::floor((adjusted_glyph_height/float(thisGlyph->getGlyphHeight()))*float(thisGlyph->getGlyphWidth()));
+        }
+
+    private:
+        float screen_width;
+        float screen_height;
+};
+
 class BitmapFont{
     public:
-        BitmapFont(std::string bitmap_fname, std::string csv_font_map_fname):   bitmap_fname(bitmap_fname), 
+        BitmapFont(SDL_Renderer* renderer, std::string bitmap_fname, std::string csv_font_map_fname, int height_px):   
+                                                                                renderer(renderer),
+                                                                                bitmap_fname(bitmap_fname), 
                                                                                 csv_font_map_fname(csv_font_map_fname),
-                                                                                font_CSV(CSV_Object(csv_font_map_fname)){
-
-            
-
-            for(int i=0;i<font_CSV.getNumRows();i++)
-            {
-                int ascii_code = font_CSV.getRowByID(i).ASCII_code;
-                std::cout << ascii_code << ", " << font_CSV.getRowByASCII_Code(ascii_code).ASCII_chars << ", " << font_CSV.getRowByASCII_Code(ascii_code).width << std::endl;
-            }
+                                                                                font_CSV(CSV_Object(csv_font_map_fname)),
+                                                                                glyph_height_in_pixels(height_px){
+            loadGlyphs();
             std::cout<<"CSV Loaded"<<std::endl;
         }
 
-      
+        void loadGlyphs(){
+
+            this->font_image = std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, this->bitmap_fname.c_str()));
+            //const char* my_c_str = this->bitmap_fname.c_str();
+            for(int i=0;i<this->font_CSV.getNumRows();i++)
+            {
+                int ascii_code = font_CSV.getRowByID(i).ASCII_code;
+                
+                
+                SDL_Rect glyphRect;
+                glyphRect.x=font_CSV.getRowByASCII_Code(ascii_code).cumulativeXPos;
+                glyphRect.y=0;
+                glyphRect.h=this->glyph_height_in_pixels;
+                glyphRect.w=font_CSV.getRowByASCII_Code(ascii_code).width;
+
+                std::shared_ptr<Glyph> temp_Glyph(new Glyph(font_image, glyphRect, ascii_code,font_CSV.getRowByASCII_Code(ascii_code).ASCII_chars));                   
+                std::cout << ascii_code << ", " << font_CSV.getRowByASCII_Code(ascii_code).ASCII_chars << ", " << font_CSV.getRowByASCII_Code(ascii_code).width << std::endl;
+                alphabetGlyphs.insert({ascii_code,temp_Glyph});
+
+            }            
+        }
+
+        void placeCharAtXY(int x, int y, int ascii_code, int scaled_width, int scaled_height){
+
+            std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
+            SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
+            SDL_Rect scaled_glyph_rect;
+            scaled_glyph_rect.x=x;
+            scaled_glyph_rect.y=y;
+            scaled_glyph_rect.h=tempGlyph->getGlyphHeight();
+            scaled_glyph_rect.w=tempGlyph->getGlyphWidth();
+            SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&scaled_glyph_rect);
+
+        }
+
+        void placeCharAtXY(int x, int y, int ascii_code, int pt){
+            int scaled_height = glyph_scalar.getAdjGlyphHeight(pt);
+            std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
+            int scaled_width = glyph_scalar.getAdjGlyphWidth(tempGlyph,scaled_height);
+            SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
+            SDL_Rect scaled_glyph_rect;
+            scaled_glyph_rect.x=x;
+            scaled_glyph_rect.y=y;
+            scaled_glyph_rect.h=scaled_height;
+            scaled_glyph_rect.w=scaled_width;
+            SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&scaled_glyph_rect);
+
+        }
 
     private:
+        std::map<int,std::shared_ptr<Glyph>> alphabetGlyphs;
+        int glyph_height_in_pixels;
+        SDL_Renderer* renderer;
         std::string bitmap_fname;
         std::string csv_font_map_fname;
+        std::shared_ptr<stbimageTexture> font_image;
+        GlyphRectScalar glyph_scalar;
         CSV_Object font_CSV;
+
 
 };
 

@@ -3,7 +3,7 @@
 
 //SDL related
 #include <SDL2/SDL.h>
-
+#define SDL_STBIMAGE_IMPLEMENTATION  // needed for SDL_stdimage.h
 
 //Game related
 #include "preprocessor.cpp"  // helps with cross-platform related identification
