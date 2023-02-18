@@ -319,18 +319,9 @@ class BitmapFont{
             }            
         }
 
-        void placeCharAtXY(int x, int y, int ascii_code, int scaled_width, int scaled_height){
 
-            std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
-            SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
-            SDL_Rect scaled_glyph_rect;
-            scaled_glyph_rect.x=x;
-            scaled_glyph_rect.y=y;
-            scaled_glyph_rect.h=tempGlyph->getGlyphHeight();
-            scaled_glyph_rect.w=tempGlyph->getGlyphWidth();
-            SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&scaled_glyph_rect);
 
-        }
+
 
         void placeCharAtXY(int x, int y, int ascii_code, int pt){
             int scaled_height = glyph_scalar.getAdjGlyphHeight(pt);
@@ -343,10 +334,36 @@ class BitmapFont{
             scaled_glyph_rect.h=scaled_height;
             scaled_glyph_rect.w=scaled_width;
             SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&scaled_glyph_rect);
+        }
+
+        void placeStringAtXY(std::string this_string, int x, int y, int pt){
+            int cumulative_x=x;
+            int adj_glyph_height;
+            int adj_glyph_width;
+            adj_glyph_height = this->glyph_scalar.getAdjGlyphHeight(pt);
+            for (int ASCII_code:this_string){
+                if ((ASCII_code<32)||(ASCII_code>=128)){
+                    ASCII_code=127;
+                }
+                adj_glyph_width = this->glyph_scalar.getAdjGlyphWidth(this->alphabetGlyphs[ASCII_code],adj_glyph_height);
+                placeCharAtXY_Dimensions(cumulative_x, y, ASCII_code, adj_glyph_height, adj_glyph_width);
+                cumulative_x = cumulative_x+adj_glyph_width;
+            }
 
         }
 
     private:
+        void placeCharAtXY_Dimensions(int x, int y, int ascii_code, int scaled_height, int scaled_width){
+            std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
+            SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
+            SDL_Rect scaled_glyph_rect;
+            scaled_glyph_rect.x=x;
+            scaled_glyph_rect.y=y;
+            scaled_glyph_rect.h=scaled_height;
+            scaled_glyph_rect.w=scaled_width;
+            SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&scaled_glyph_rect);
+        }
+
         std::map<int,std::shared_ptr<Glyph>> alphabetGlyphs;
         int glyph_height_in_pixels;
         SDL_Renderer* renderer;
