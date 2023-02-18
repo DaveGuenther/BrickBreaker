@@ -48,7 +48,6 @@ TEST_CASE("Load Bitmap Font CSV","[font]"){
 
 
 
-
 TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 800, SDL_WINDOW_SHOWN);  //Steamdeck is 1280x800
@@ -65,6 +64,11 @@ TEST_CASE("Test Glyph Class Instantiation", "[font]"){
     REQUIRE(Glyph_Exclamation->getGlyphASCII_Code()==33);
     REQUIRE(Glyph_Exclamation->getGlyphASCII_Char()==std::string("!"));
     
+    // Test the Glyph Scalar class which resized the rendering rectangle based on a provided pt value (12pt, 10pt, etc)
+    GlyphRectScalar glyph_scalar;
+    REQUIRE(glyph_scalar.getAdjGlyphHeight(12)==35);
+    REQUIRE(glyph_scalar.getAdjGlyphWidth(Glyph_Exclamation,glyph_scalar.getAdjGlyphHeight(12))==17);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 	SDL_Quit();    
