@@ -92,11 +92,8 @@ void Game_Loop::update(){
         }
     }
     SDL_RenderCopy(renderer,this->png_image->getTexture(),NULL,NULL);
-    this->myFont->placeCharAtXY(50,50,68,14);
-    this->myFont->placeCharAtXY(75,50,97,14);
-    this->myFont->placeCharAtXY(100,50,118,14);
-    this->myFont->placeCharAtXY(125,50,101,14);
-
+    this->myFont->placeStringAtXY("Brick Breaker!",50, 300, 60);
+   
 
     SDL_RenderPresent(renderer);
 
