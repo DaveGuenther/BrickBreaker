@@ -36,6 +36,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <list>
 #include <stdexcept>
 
 #include <SDL2/SDL.h>
@@ -285,6 +286,83 @@ class GlyphRectScalar{
         float screen_height;
 };
 
+
+
+class WordWrap{
+    public:
+        /**
+         * @brief Construct a new Word Wrap object
+         * 
+         * @param input_string this is the std::string value that you wish to display on a workwrapped block
+         * @param pt total fontsize (10pt, 12pt, 14pt, etc)
+         * @param text_block_width Total width in pixels of the text block whereby the class with wrap the string to the next line
+         */
+        WordWrap(std::map<int,std::shared_ptr<Glyph>> alphabetGlyphs, std::string input_string, int pt, int text_block_width):
+                                                                        alphabetGlyphs(alphabetGlyphs),
+                                                                        input_string(input_string),
+                                                                        pt(pt),
+                                                                        text_block_width(text_block_width){
+            
+            tokenizeString();
+        }
+    private:
+
+        void tokenizeString(){
+            
+            std::string this_word;
+            std::list<std::shared_ptr<Glyph>> word_glyphs;
+            std::list<SDL_Rect> renderable_rects;
+            std::stringstream my_stream(this->input_string);
+            while(getline(my_stream, this_word, ' ')){
+                int cumulative_x=0;
+                int adj_glyph_height;
+                int adj_glyph_width;
+                adj_glyph_height = this->glyph_scalar.getAdjGlyphHeight(pt);
+                for (int ASCII_code:this_word){
+                    if ((ASCII_code<32)||(ASCII_code>=128)){
+                        ASCII_code=127;
+                    }
+                    adj_glyph_width = this->glyph_scalar.getAdjGlyphWidth(this->alphabetGlyphs[ASCII_code],adj_glyph_height);
+                    //placeCharAtXY_Dimensions(cumulative_x, y, ASCII_code, adj_glyph_height, adj_glyph_width);
+                    SDL_Rect scaled_glyph_rect;
+                    scaled_glyph_rect.x=cumulative_x;
+                    scaled_glyph_rect.y=0;
+                    scaled_glyph_rect.h=adj_glyph_height;
+                    scaled_glyph_rect.w=adj_glyph_width;
+                    cumulative_x = cumulative_x+adj_glyph_width;
+                    renderable_rects.push_back(scaled_glyph_rect);
+                    word_glyphs.push_back(this->alphabetGlyphs[ASCII_code]);
+                }
+                Token this_word_token{this_word, word_glyphs, renderable_rects, cumulative_x};
+                this->tokenized_string.push_back(this_word_token);
+            }
+        }
+
+        struct GlyphLine{
+            std::list<std::shared_ptr<Glyph>> my_glyphs;
+            std::list<SDL_Rect> renderable_rects;
+            int width;
+        };
+        typedef struct GlyphLine GlyphLine;
+
+        struct Token{
+            std::string word;
+            std::list<std::shared_ptr<Glyph>> word_glyphs;
+            std::list<SDL_Rect> renderable_rects;
+            int width;
+        };
+        typedef struct Token Token;
+
+        std::map<int,std::shared_ptr<Glyph>> alphabetGlyphs;
+        GlyphRectScalar glyph_scalar;
+        std::vector<GlyphLine> renderable_lines;
+        std::list<Token> tokenized_string;
+        std::string input_string;
+        int pt;
+        int text_block_width;
+};
+
+
 class BitmapFont{
     public:
         BitmapFont(SDL_Renderer* renderer, std::string bitmap_fname, std::string csv_font_map_fname, int height_px):   
@@ -293,10 +371,90 @@ class BitmapFont{
                                                                                 csv_font_map_fname(csv_font_map_fname),
                                                                                 font_CSV(CSV_Object(csv_font_map_fname)),
                                                                                 glyph_height_in_pixels(height_px){
-            loadGlyphs();
+            this->loadGlyphs();
             std::cout<<"CSV Loaded"<<std::endl;
         }
 
+
+        /**
+         * @brief This function will render a chracter glyph based on its ascii value at x, y pixel location on the screen.  The glyph will render at
+         * the typeset font size provided by pt (10pt, 12pt, 14pt, etc) and is configured to display true to size on a Steamdeck Screen (as this library
+         * was initially writted to work with SDL on the Steam Deck.)
+         * 
+         * @param x this is the x position to place the top left corner of the character
+         * @param y this is the y position ot place the top left corner of the character
+         * @param ascii_code this is the ascii code of the glyph to place (codes: 32-127 are supported)
+         * @param pt the font size (10pt, 12pt, 14pt, etc)
+         */
+        void placeCharAtXY(int x, int y, int ascii_code, int pt){
+            int scaled_height = glyph_scalar.getAdjGlyphHeight(pt);
+            std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
+            int scaled_width = glyph_scalar.getAdjGlyphWidth(tempGlyph,scaled_height);
+            SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
+            SDL_Rect scaled_glyph_rect;
+            scaled_glyph_rect.x=x;
+            scaled_glyph_rect.y=y;
+            scaled_glyph_rect.h=scaled_height;
+            scaled_glyph_rect.w=scaled_width;
+            SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&scaled_glyph_rect);
+        }
+
+        /**
+         * @brief This function will render this_string as a single line of glyphs at x, y pixel location on the screen.  The string will render at
+         * the typeset font size provided by pt (10pt, 12pt, 14pt, etc) and is configured to display true to size on a Steamdeck Screen (as this library
+         * was initially writted to work with SDL on the Steam Deck.)
+         * 
+         * @param this_strinng this is the string of characters to place
+         * @param x this is the x position to place the top left corner of the first character of the string
+         * @param y this is the y position to place the top left corner of the first character of the string
+         * @param pt the font size (10pt, 12pt, 14pt, etc)
+         */
+        void placeStringAtXY(std::string this_string, int x, int y, int pt){
+            int cumulative_x=x;
+            int adj_glyph_height;
+            int adj_glyph_width;
+            adj_glyph_height = this->glyph_scalar.getAdjGlyphHeight(pt);
+            for (int ASCII_code:this_string){
+                if ((ASCII_code<32)||(ASCII_code>=128)){
+                    ASCII_code=127;
+                }
+                adj_glyph_width = this->glyph_scalar.getAdjGlyphWidth(this->alphabetGlyphs[ASCII_code],adj_glyph_height);
+                placeCharAtXY_Dimensions(cumulative_x, y, ASCII_code, adj_glyph_height, adj_glyph_width);
+                cumulative_x = cumulative_x+adj_glyph_width;
+            }
+
+        }
+
+        /**
+         * @brief This function will render this_string of Glyphs across multiple lines at x, y pixel location on the screen.  The string will 
+         * render at the typeset font size provided by pt (10pt, 12pt, 14pt, etc) and is configured to display true to size on a Steamdeck Screen (as this library
+         * was initially writted to work with SDL on the Steam Deck.)  The string is clipped and continues on the next line once the lkine_width is reached
+         * 
+         * @param this_strinng this is the string of characters to place
+         * @param x this is the x position to place the top left corner of the first character of the string
+         * @param y this is the y position to place the top left corner of the first character of the string
+         * @param pt the font size (10pt, 12pt, 14pt, etc)
+         * @param line_width this is the total width in pixels that the string needs to be placed in before moving to the next line
+         */
+        void placeWordWrappedStringAtXY(std::string this_string, int x, int y, int pt, int line_width){
+            //std::shared_ptr<BitmapFont> my_bitmap_font_ptr = std::make_shared<BitmapFont> (this);
+            WordWrap my_word_wrapped_string(this->alphabetGlyphs, this_string, pt, line_width);
+
+        }
+
+        std::shared_ptr<Glyph> getGlyph(int ASCII_code){
+            if ((ASCII_code<32)||(ASCII_code>=128)){
+                    ASCII_code=127;
+                }
+            return this->alphabetGlyphs[ASCII_code];
+        }
+
+    private:
+
+        /**
+         * @brief internal function called by the constructor to load all the glyphs in the ascii character set
+         * 
+         */
         void loadGlyphs(){
 
             this->font_image = std::shared_ptr<stbimageTexture>(new stbimageTexture(this->renderer, this->bitmap_fname.c_str()));
@@ -319,40 +477,17 @@ class BitmapFont{
             }            
         }
 
-
-
-
-
-        void placeCharAtXY(int x, int y, int ascii_code, int pt){
-            int scaled_height = glyph_scalar.getAdjGlyphHeight(pt);
-            std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
-            int scaled_width = glyph_scalar.getAdjGlyphWidth(tempGlyph,scaled_height);
-            SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
-            SDL_Rect scaled_glyph_rect;
-            scaled_glyph_rect.x=x;
-            scaled_glyph_rect.y=y;
-            scaled_glyph_rect.h=scaled_height;
-            scaled_glyph_rect.w=scaled_width;
-            SDL_RenderCopy(renderer, tempGlyph->getFontTexture(),glyphRect,&scaled_glyph_rect);
-        }
-
-        void placeStringAtXY(std::string this_string, int x, int y, int pt){
-            int cumulative_x=x;
-            int adj_glyph_height;
-            int adj_glyph_width;
-            adj_glyph_height = this->glyph_scalar.getAdjGlyphHeight(pt);
-            for (int ASCII_code:this_string){
-                if ((ASCII_code<32)||(ASCII_code>=128)){
-                    ASCII_code=127;
-                }
-                adj_glyph_width = this->glyph_scalar.getAdjGlyphWidth(this->alphabetGlyphs[ASCII_code],adj_glyph_height);
-                placeCharAtXY_Dimensions(cumulative_x, y, ASCII_code, adj_glyph_height, adj_glyph_width);
-                cumulative_x = cumulative_x+adj_glyph_width;
-            }
-
-        }
-
-    private:
+        /**
+         * @brief This function will render a chracter glyph based on its ascii value at x, y pixel location on the screen.  Rather than 
+         * using the pt fontsize to scale the glyph, it will instead capture a scaled_height and scaled_width variable to represent the bounding box
+         * of the glyph in pixels on the screen.  This function is called by the placeString functions of this class.
+         * 
+         * @param x this is the x position to place the top left corner of the character
+         * @param y this is the y position ot place the top left corner of the character
+         * @param ascii_code this is the ascii code of the glyph to place (codes: 32-127 are supported)
+         * @param scaled_height this is the height in pixels of the glyph's typeset bounding box
+         * @param scaled_width this is the width in pixels of the glyph's typeset bounding box
+         */
         void placeCharAtXY_Dimensions(int x, int y, int ascii_code, int scaled_height, int scaled_width){
             std::shared_ptr<Glyph> tempGlyph=this->alphabetGlyphs[ascii_code];
             SDL_Rect* glyphRect = tempGlyph->getGlyphOffsetRect();
