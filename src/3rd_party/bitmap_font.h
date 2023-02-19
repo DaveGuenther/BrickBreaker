@@ -307,7 +307,34 @@ class WordWrap{
         }
     private:
 
+        struct GlyphLine{
+            std::list<std::shared_ptr<Glyph>> my_glyphs;
+            std::list<SDL_Rect> renderable_rects;
+            int width;
+        };
+        typedef struct GlyphLine GlyphLine;
+
+        struct Token{
+            std::string word;
+            std::list<std::shared_ptr<Glyph>> word_glyphs;
+            std::list<SDL_Rect> renderable_rects;
+            int width;
+        };
+        typedef struct Token Token;
+
+        /**
+         * @brief Given an existing GlyphLine and a token, this will break the token down into its glyph components and add each to the 
+         * GlyphLine in place
+         * 
+         * @param this_line 
+         * @param this_token 
+         */
+        void addTokenToLine(GlyphLine &this_line, Token &this_token){
+            
+        }
+
         void processTokens(){
+            GlyphLine this_line;
             int current_line_width=0;
             std::list<Token>::iterator token_iterator;
             token_iterator = tokenized_string.begin();
@@ -316,9 +343,48 @@ class WordWrap{
                 if (token_iterator->width > this->text_block_width){
                     // A single token is longer than space sllocated for a single line.  It will need to be chopped with a
                     // hyphen and the remaining amount handled on a new line as a new token
+
+                    std::string left_word;
+                    std::list<std::shared_ptr<Glyph>> left_word_glyphs;
+                    std::list<SDL_Rect> left_renderable_rects;
+                    int left_width=0;                    
+                    // split to left token and right token
+                    for (int left_token_itr=0;left_token_itr<this->text_block_width-1;left_token_itr++){
+                        left_word+=token_iterator->word[left_token_itr];
+                        token_iterator->word.erase(0,1);
+                        left_word_glyphs.push_back(token_iterator->word_glyphs.front());
+                        token_iterator->word_glyphs.pop_front();
+                        left_renderable_rects.push_back(token_iterator->renderable_rects.front());
+                        token_iterator->renderable_rects.pop_front();
+                        left_width+=left_renderable_rects.front().w;
+                        token_iterator->width-=left_renderable_rects.front().w;
+                    }
+
+                    // add hyphen to left token
+                    int hyphen_ascii_code=45;
+                    left_word+='-';
+                    left_word_glyphs.push_back(this->alphabetGlyphs[hyphen_ascii_code]);
+                    SDL_Rect scaled_hyphen_glyph_rect;
+                    scaled_hyphen_glyph_rect.x=left_width;
+                    scaled_hyphen_glyph_rect.y=0;
+                    int adj_glyph_height = this->glyph_scalar.getAdjGlyphHeight(pt);
+                    int adj_glyph_width = this->glyph_scalar.getAdjGlyphWidth(this->alphabetGlyphs[hyphen_ascii_code],adj_glyph_height);
+                    scaled_hyphen_glyph_rect.h=adj_glyph_height;
+                    scaled_hyphen_glyph_rect.w=adj_glyph_width;
+                    left_renderable_rects.push_back(scaled_hyphen_glyph_rect);
+
+                    // process left_token to a line and add the line
+                    
+
+                    // For this use case only we do not increment the iterator because we trimmed the token to just the remainder,
+                    // so we want to handle the take token over again in the next loop iteration
+                    
+
+                    
                 }
             }
         }
+
 
         void tokenizeString(){
             
@@ -351,20 +417,7 @@ class WordWrap{
             }
         }
 
-        struct GlyphLine{
-            std::list<std::shared_ptr<Glyph>> my_glyphs;
-            std::list<SDL_Rect> renderable_rects;
-            int width;
-        };
-        typedef struct GlyphLine GlyphLine;
 
-        struct Token{
-            std::string word;
-            std::list<std::shared_ptr<Glyph>> word_glyphs;
-            std::list<SDL_Rect> renderable_rects;
-            int width;
-        };
-        typedef struct Token Token;
 
         std::map<int,std::shared_ptr<Glyph>> alphabetGlyphs;
         GlyphRectScalar glyph_scalar;
