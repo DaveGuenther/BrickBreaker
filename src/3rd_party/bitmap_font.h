@@ -307,6 +307,19 @@ class WordWrap{
         }
     private:
 
+        void processTokens(){
+            int current_line_width=0;
+            std::list<Token>::iterator token_iterator;
+            token_iterator = tokenized_string.begin();
+            while(token_iterator!=tokenized_string.end()){ // move through each token individually
+
+                if (token_iterator->width > this->text_block_width){
+                    // A single token is longer than space sllocated for a single line.  It will need to be chopped with a
+                    // hyphen and the remaining amount handled on a new line as a new token
+                }
+            }
+        }
+
         void tokenizeString(){
             
             std::string this_word;
@@ -323,7 +336,7 @@ class WordWrap{
                         ASCII_code=127;
                     }
                     adj_glyph_width = this->glyph_scalar.getAdjGlyphWidth(this->alphabetGlyphs[ASCII_code],adj_glyph_height);
-                    //placeCharAtXY_Dimensions(cumulative_x, y, ASCII_code, adj_glyph_height, adj_glyph_width);
+
                     SDL_Rect scaled_glyph_rect;
                     scaled_glyph_rect.x=cumulative_x;
                     scaled_glyph_rect.y=0;
