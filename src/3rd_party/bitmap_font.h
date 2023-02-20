@@ -304,11 +304,12 @@ class WordWrap{
                                                                         text_block_width(text_block_width){
             
             tokenizeString();
+            processTokens();
         }
     private:
 
         struct GlyphLine{
-            std::list<std::shared_ptr<Glyph>> my_glyphs;
+            std::list<std::shared_ptr<Glyph>> glyphs;
             std::list<SDL_Rect> renderable_rects;
             int width;
         };
@@ -330,7 +331,21 @@ class WordWrap{
          * @param this_token 
          */
         void addTokenToLine(GlyphLine &this_line, Token &this_token){
-            
+            //this_token.renderable_rects.
+            std::list<std::shared_ptr<Glyph>>::iterator glyph_iterator;
+            glyph_iterator = this_token.word_glyphs.begin();
+            std::list<SDL_Rect>::iterator rect_iterator;
+            rect_iterator = this_token.renderable_rects.begin();
+            while((glyph_iterator!=this_token.word_glyphs.end())&&
+                    (rect_iterator!=this_token.renderable_rects.end())){ // move through each token individually
+
+                this_line.glyphs.push_back(*glyph_iterator);
+                this_line.renderable_rects.push_back(*rect_iterator);
+                this_line.width+=rect_iterator->w;
+
+                rect_iterator++;
+                glyph_iterator++;
+            }
         }
 
         void processTokens(){
@@ -372,9 +387,10 @@ class WordWrap{
                     scaled_hyphen_glyph_rect.h=adj_glyph_height;
                     scaled_hyphen_glyph_rect.w=adj_glyph_width;
                     left_renderable_rects.push_back(scaled_hyphen_glyph_rect);
+                    Token left_token{left_word, left_word_glyphs, left_renderable_rects, left_width};
 
                     // process left_token to a line and add the line
-                    
+                    this->addTokenToLine(this_line,left_token);
 
                     // For this use case only we do not increment the iterator because we trimmed the token to just the remainder,
                     // so we want to handle the take token over again in the next loop iteration
