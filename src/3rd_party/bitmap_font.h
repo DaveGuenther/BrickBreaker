@@ -360,19 +360,25 @@ class WordWrap{
                     // hyphen and the remaining amount handled on a new line as a new token
 
                     std::string left_word;
+                    int char_width_px = token_iterator->renderable_rects.front().w;
                     std::list<std::shared_ptr<Glyph>> left_word_glyphs;
                     std::list<SDL_Rect> left_renderable_rects;
-                    int left_width=0;                    
+                    int left_width=0;   
+                    int char_index=0;                 
                     // split to left token and right token
-                    for (int left_token_itr=0;left_token_itr<this->text_block_width-1;left_token_itr++){
-                        left_word+=token_iterator->word[left_token_itr];
+                    for (int left_token_itr=0;left_token_itr<this->text_block_width-1;left_token_itr+=char_width_px){
+                        //Set left_word to front character of string
+                        left_word+=token_iterator->word[char_index];
+                        //Remove one character off front of string
                         token_iterator->word.erase(0,1);
+                        // Add character to left token
                         left_word_glyphs.push_back(token_iterator->word_glyphs.front());
                         token_iterator->word_glyphs.pop_front();
                         left_renderable_rects.push_back(token_iterator->renderable_rects.front());
                         token_iterator->renderable_rects.pop_front();
                         left_width+=left_renderable_rects.front().w;
                         token_iterator->width-=left_renderable_rects.front().w;
+                        char_width_px=token_iterator->renderable_rects.front().w;
                     }
 
                     // add hyphen to left token
