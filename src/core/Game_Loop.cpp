@@ -93,7 +93,7 @@ void Game_Loop::update(){
     }
     SDL_RenderCopy(renderer,this->png_image->getTexture(),NULL,NULL);
     this->myFont->placeStringAtXY("Brick Breaker!",50, 300, 60);
-    this->myFont->placeWordWrappedStringAtXY("blah blahblah blah",100,100,12,50);
+    this->myFont->placeWordWrappedStringAtXY("quick brown fox jumps over the lazy dog!",100,100,12,70);
 
     SDL_RenderPresent(renderer);
 
