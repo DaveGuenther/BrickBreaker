@@ -310,6 +310,7 @@ class WordWrap{
 
 
         std::vector<std::string> multi_line_strings;
+        std::vector<int> multi_line_widths;
         int renderable_glyph_height_px;
     private:
 
@@ -466,6 +467,7 @@ class WordWrap{
                     this_line_str+=left_token.word;
                     this_line_str = trim(this_line_str);
                     this->multi_line_strings.push_back(this_line_str);
+                    this->multi_line_widths.push_back(this_line.width);
 
 
                     // Clear the line now that it is stored on the vector
@@ -488,6 +490,7 @@ class WordWrap{
                     renderable_lines.push_back(this_line);
                     this_line_str = trim(this_line_str);
                     this->multi_line_strings.push_back(this_line_str);
+                    this->multi_line_widths.push_back(this_line.width);
 
                     // Clear the line now that it is stored on the vector
                     this_line.width=0;
@@ -508,6 +511,7 @@ class WordWrap{
                     this_line_str+=token_iterator->word;
                     this_line_str = trim(this_line_str);
                     this->multi_line_strings.push_back(this_line_str);
+                    this->multi_line_widths.push_back(this_line.width);
 
                     // Clear the line now that it is stored on the vector
                     this_line.width=0;
@@ -573,6 +577,7 @@ class WordWrap{
                 renderable_lines.push_back(this_line);
                 this_line_str = trim(this_line_str);
                 this->multi_line_strings.push_back(this_line_str);  
+                this->multi_line_widths.push_back(this_line.width);
             }
         }
 
@@ -683,6 +688,25 @@ class BitmapFont{
 
         }
 
+    int justifyLineStartOffsetX(int line_width, int max_width, std::string justification){
+        int offset_x = max_width-line_width;
+        std::string right = "right";
+        std::string center = "center";
+        if(justification.compare(right)==0){
+            // once we subtract the line_width from the max_width, we have the offset to add to each line to make it end at the right edge.
+            // We don't have to do anything else here.  This branch is here for readability.
+            offset_x=offset_x;
+        }else if (justification.compare(center)==0){
+            // if center justified, once we subtract the line_width from the max_width, we can simply divide that by 2 to get an offset that
+            // will make the line of tect center-justified to the max_width
+            offset_x = offset_x/2;
+        }else{
+            // Text is justified left by default.  This branch will just set the x_offset to zero so it remains left-justified.
+            offset_x=0;
+        }
+        return offset_x;
+    }
+
         /**
          * @brief This function will render this_string of Glyphs across multiple lines at x, y pixel location on the screen.  The string will 
          * render at the typeset font size provided by pt (10pt, 12pt, 14pt, etc) and is configured to display true to size on a Steamdeck Screen (as this library
@@ -694,16 +718,19 @@ class BitmapFont{
          * @param pt the font size (10pt, 12pt, 14pt, etc)
          * @param line_width this is the total width in pixels that the string needs to be placed in before moving to the next line
          */
-        void placeWordWrappedStringAtXY(std::string this_string, int x, int y, int pt, int line_width){
+        void placeWordWrappedStringAtXY(std::string this_string, int x, int y, int pt, int max_line_width, std::string justification){
 
-            WordWrap my_word_wrapped_string(this->alphabetGlyphs, this_string, pt, line_width);
+            WordWrap my_word_wrapped_string(this->alphabetGlyphs, this_string, pt, max_line_width);
             int adj_line_height = my_word_wrapped_string.renderable_glyph_height_px;
             int line_number=0;
             int line_y=0;
+            std::vector<int>::iterator line_width_iterator = my_word_wrapped_string.multi_line_widths.begin();
+            std::vector<std::string>::iterator line_string_iterator = my_word_wrapped_string.multi_line_strings.begin();
 
             for (std::string this_line:my_word_wrapped_string.multi_line_strings){
                 line_y=y+(adj_line_height*line_number);
-                placeStringAtXY(this_line,x,line_y,pt);
+                int x_offset = this->justifyLineStartOffsetX(my_word_wrapped_string.multi_line_widths[line_number], max_line_width, justification);
+                placeStringAtXY(this_line,x+x_offset,line_y,pt);
                 line_number+=1;
             }
             

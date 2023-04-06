@@ -93,10 +93,9 @@ void Game_Loop::update(){
     }
     SDL_RenderCopy(renderer,this->png_image->getTexture(),NULL,NULL);
     this->myFont->placeStringAtXY("Brick Breaker!",50, 300, 60);
-    this->myFont->placeWordWrappedStringAtXY("The quick brown fox jumps over the lazy dog!",100,100,12,300);
-    this->myFont->placeWordWrappedStringAtXY("The quick brown fox jumps over the lazy dog!",400,200,10,300);
-    this->myFont->placeWordWrappedStringAtXY("The quick brown fox jumps over the lazy dog!",50,450,14,500);
-
+    this->myFont->placeWordWrappedStringAtXY("The quick brown fox jumps over the lazy dog!",100,100,12,300,"left");
+    this->myFont->placeWordWrappedStringAtXY("The quick brown fox jumps over the lazy dog!",400,200,10,300,"right");
+    this->myFont->placeWordWrappedStringAtXY("The quick brown fox jumps over the lazy dog!",50,450,14,500,"center");
     SDL_RenderPresent(renderer);
 
 
