@@ -305,9 +305,9 @@ class WordWrap{
             
             tokenizeString();
             processTokens();
-        }
-    private:
-
+        }        
+        
+ 
         struct GlyphLine{
             std::list<std::shared_ptr<Glyph>> glyphs;
             std::list<SDL_Rect> renderable_rects;
@@ -322,6 +322,13 @@ class WordWrap{
             int width;
         };
         typedef struct Token Token;
+
+        std::vector<GlyphLine> renderable_lines;
+        int renderable_glyph_height_px;
+    private:
+
+
+        
 
         /**
          * @brief Given an existing GlyphLine and a token, this will break the token down into its glyph components and add each to the 
@@ -366,14 +373,30 @@ class WordWrap{
             }
         }
 
+        void calculateTokenRenderableWidth(Token &token){
+            std::list<SDL_Rect>::iterator renderable_rect_iterator;
+            renderable_rect_iterator = token.renderable_rects.begin();
+            token.width=0;
+            while(renderable_rect_iterator!=token.renderable_rects.end()){ // move through each token individually
+                token.width+=renderable_rect_iterator->w;
+                renderable_rect_iterator++;
+            }            
+        }
+
         void processTokens(){
             GlyphLine this_line;
-            int current_line_width=0;
+            this_line.width=0;
+            int space_ascii_code=32;
+            int adj_glyph_height = this->glyph_scalar.getAdjGlyphHeight(pt);
+            this->renderable_glyph_height_px=adj_glyph_height;
+            int adj_glyph_width = this->glyph_scalar.getAdjGlyphWidth(this->alphabetGlyphs[space_ascii_code],adj_glyph_height);
             std::list<Token>::iterator token_iterator;
             token_iterator = tokenized_string.begin();
-            while(token_iterator!=tokenized_string.end()){ // move through each token individually
+            int total_tokens = tokenized_string.size();
+            int current_token = 0;
+            while(current_token<total_tokens){ // move through each token individually
 
-                if (token_iterator->width > this->text_block_width){
+                if ((this_line.width==0) && (token_iterator->width > this->text_block_width-this_line.width)){
                     // A single token is longer than space allocated for a single line.  It will need to be chopped with a
                     // hyphen and the remaining amount handled on a new line as a new token
 
@@ -384,22 +407,25 @@ class WordWrap{
                     std::list<std::shared_ptr<Glyph>> left_word_glyphs;
                     std::list<SDL_Rect> left_renderable_rects;
                     int left_width=0;   
-                    int char_index=0;                 
+                    int char_index=0;
+                    bool started_processing_token=false;                 
                     // split to left token and right token
-                    for (int left_token_itr=0;left_token_itr<this->text_block_width-hyphen_width_px;left_token_itr+=char_width_px){
+                    for (int left_token_itr=0;left_token_itr<this->text_block_width-hyphen_width_px-this_line.width;left_token_itr+=char_width_px){
                         //Set left_word to front character of string
                         left_word+=token_iterator->word[char_index];
                         //Remove one character off front of string
                         token_iterator->word.erase(0,1);
                         // Add character to left token
                         left_word_glyphs.push_back(token_iterator->word_glyphs.front());
-                        token_iterator->word_glyphs.pop_front();
+
                         left_renderable_rects.push_back(token_iterator->renderable_rects.front());
-                        token_iterator->renderable_rects.pop_front();
                         left_width+=left_renderable_rects.front().w;
+                        this_line.width+=left_renderable_rects.front().w;
                         token_iterator->width-=left_renderable_rects.front().w;
                         char_width_px=token_iterator->renderable_rects.front().w;
-                    }
+                        token_iterator->word_glyphs.pop_front();                     
+                        token_iterator->renderable_rects.pop_front();
+                    }   
 
                     // add hyphen to left token
                     int hyphen_ascii_code=45;
@@ -414,6 +440,7 @@ class WordWrap{
                     scaled_hyphen_glyph_rect.w=adj_glyph_width;
                     left_renderable_rects.push_back(scaled_hyphen_glyph_rect);
                     Token left_token{left_word, left_word_glyphs, left_renderable_rects, left_width};
+                    calculateTokenRenderableWidth(left_token);
 
                     // process left_token to a line and add the line
                     this->addTokenToLine(this_line,left_token);
@@ -423,25 +450,27 @@ class WordWrap{
                     this_line.glyphs.clear();
                     this_line.renderable_rects.clear();
 
-                    // Note: FOR THIS USE CASE ONLY we do not increment the iterator because we trimmed the token to just the remainder,
-                    // so we want to handle the remainder token over again in the next loop iteration
-                    
-                    // BE SURE TO RESET THE RIGHT TOKEN HERE Using carriageReturn()
+                    // Note: We do NOT step the iterator because we trimmed the token to just the remainder,
+                    // so we want to handle the remainder token over again in the next loop iteration, but need to reset the spacing so that it 
+                    // begins at 0 like other tokens.
+                    carriageReturn(*(token_iterator));
+                    calculateTokenRenderableWidth(*(token_iterator));
 
                 }
-                else if(this_line.width+token_iterator->width > this->text_block_width){
-                    // Adding the current token to this line will push it over the total block width
-                    this->addTokenToLine(this_line,*(token_iterator));
+                else if(token_iterator->width > this->text_block_width-this_line.width){
+                    
+
+                    // Adding the current token to this line will push it over the total block width.  We'll not push the token and instead start a new line
                     renderable_lines.push_back(this_line);
                     // Clear the line now that it is stored on the vector
                     this_line.width=0;
                     this_line.glyphs.clear();
                     this_line.renderable_rects.clear();
-  
-                    // We do step the iterator here because we want to look at the next token
-                    token_iterator++;
+
+                    // We do NOT step the iterator here because we want address this same token again on a new line
+
                 }
-                else if(this_line.width+token_iterator->width + token_iterator->renderable_rects.front().w > this->text_block_width){ 
+                else if(token_iterator->width + token_iterator->renderable_rects.front().w > this->text_block_width-this_line.width){ 
                     // Adding the current token to this line will fit in the overall block width but adding a space on top 
                     // of that will push it over the total block width
                     this->addTokenToLine(this_line,*(token_iterator));
@@ -452,7 +481,11 @@ class WordWrap{
                     this_line.renderable_rects.clear();
 
                     // We do step the iterator here because we want to look at the next token
-                    token_iterator++;
+                    current_token++;
+                    if (current_token<total_tokens){ // safety so we don't step past the end of tokenized_string
+                        token_iterator++;
+                    }
+
 
                 }
                 else{
@@ -461,7 +494,7 @@ class WordWrap{
                     
                     // Add the space
                     int space_ascii_code=32;
-                    token_w_space.word+='-';
+                    token_w_space.word+=' ';
                     token_w_space.word_glyphs.push_back(this->alphabetGlyphs[space_ascii_code]);
                     SDL_Rect scaled_space_glyph_rect;
                     scaled_space_glyph_rect.x=token_w_space.renderable_rects.back().x+token_w_space.renderable_rects.back().w;
@@ -471,12 +504,33 @@ class WordWrap{
                     scaled_space_glyph_rect.h=adj_glyph_height;
                     scaled_space_glyph_rect.w=adj_glyph_width;
                     token_w_space.renderable_rects.push_back(scaled_space_glyph_rect);
-
+                    calculateTokenRenderableWidth(token_w_space); //recalculate width bc we added a glyph
+                    
                     this->addTokenToLine(this_line,token_w_space);
                     
+                    // If after adding the token to this_line, it's so big that it can't another glyph without exceeding the allowable text_block_width
+                    // then the line is added to renderable_lines and a new line is created
+                    if (this_line.width+adj_glyph_width>this->text_block_width){
+                        renderable_lines.push_back(this_line);
+                        this_line.glyphs.clear();
+                        this_line.renderable_rects.clear();
+                        this_line.width=0;
+                    }
+
                     // We do step the iterator here because we want to look at the next token
-                    token_iterator++;
+                    current_token++;
+                    if (current_token<total_tokens){ // safety so we don't step past the end of tokenized_string
+                        token_iterator++;
+                    }
+                    
                 }
+            
+
+
+            }
+            // push the remaining line onto renderable_lines if it contains glyphs
+            if(this_line.width>0){
+                renderable_lines.push_back(this_line);
             }
         }
 
@@ -509,15 +563,15 @@ class WordWrap{
                 }
                 Token this_word_token{this_word, word_glyphs, renderable_rects, cumulative_x};
                 this->tokenized_string.push_back(this_word_token);
+                word_glyphs.clear();
+                renderable_rects.clear();
             }
         }
 
-
+        std::list<Token> tokenized_string;
 
         std::map<int,std::shared_ptr<Glyph>> alphabetGlyphs;
         GlyphRectScalar glyph_scalar;
-        std::vector<GlyphLine> renderable_lines;
-        std::list<Token> tokenized_string;
         std::string input_string;
         int pt;
         int text_block_width;
@@ -600,7 +654,34 @@ class BitmapFont{
         void placeWordWrappedStringAtXY(std::string this_string, int x, int y, int pt, int line_width){
             //std::shared_ptr<BitmapFont> my_bitmap_font_ptr = std::make_shared<BitmapFont> (this);
             WordWrap my_word_wrapped_string(this->alphabetGlyphs, this_string, pt, line_width);
+            std::vector<WordWrap::GlyphLine>::iterator renderable_line_iterator = my_word_wrapped_string.renderable_lines.begin();
+            int adj_line_height = my_word_wrapped_string.renderable_glyph_height_px;
+            int line_number=0;
+            while (renderable_line_iterator!=my_word_wrapped_string.renderable_lines.end()){
+                int cumulative_x=x;
+                int adj_glyph_width;
+                std::list<std::shared_ptr<Glyph>>::iterator glyph_iterator = renderable_line_iterator->glyphs.begin();
+                std::list<SDL_Rect>::iterator renderable_rect_iterator = renderable_line_iterator->renderable_rects.begin();
+                while (glyph_iterator!=renderable_line_iterator->glyphs.end()){
+                    int cumulative_x = renderable_rect_iterator->x;
+                    int y=line_number*adj_line_height;
+                    int ASCII_code = glyph_iterator->get()->getGlyphASCII_Code();
+                    if ((ASCII_code<32)||(ASCII_code>=128)){
+                        ASCII_code=127;
+                    }
+                    int adj_glyph_height = renderable_rect_iterator->h;      
+                    int adj_glyph_width = renderable_rect_iterator->w;
+                    placeCharAtXY_Dimensions(cumulative_x, y, ASCII_code, adj_glyph_height, adj_glyph_width);
+                    glyph_iterator++;
+                    renderable_rect_iterator++;
+                }
+                line_number++;
+                renderable_line_iterator++;
 
+            
+            }
+
+            //my_word_wrapped_string.renderable_lines
         }
 
         std::shared_ptr<Glyph> getGlyph(int ASCII_code){
