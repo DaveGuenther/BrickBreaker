@@ -38,7 +38,6 @@
 #include <memory>
 #include <list>
 #include <stdexcept>
-//#include <algorithm>
 
 #include <SDL2/SDL.h>
 
@@ -293,6 +292,7 @@ class WordWrap{
         /**
          * @brief Construct a new Word Wrap object
          * 
+         * @param alphabetGlyphs this is a pointer to the entire alphabet of glyphs to be used by this class to render wordwrapped strings
          * @param input_string this is the std::string value that you wish to display on a workwrapped block
          * @param pt total fontsize (10pt, 12pt, 14pt, etc)
          * @param text_block_width Total width in pixels of the text block whereby the class with wrap the string to the next line
@@ -335,8 +335,8 @@ class WordWrap{
          * @brief Given an existing GlyphLine and a token, this will break the token down into its glyph components and add each to the 
          * GlyphLine in place
          * 
-         * @param this_line 
-         * @param this_token 
+         * @param this_line This is the Glyphline that will accept the token's glyphs (passed in by reference).  It is modified in place.
+         * @param this_token This Token will be added to the Glyphline
          */
         void addTokenToLine(GlyphLine &this_line, Token &this_token){
             //this_token.renderable_rects.
@@ -374,6 +374,11 @@ class WordWrap{
             }
         }
 
+        /**
+         * @brief Given a Token, this will recalculate the renderable width in pixels (token.width) of that token on the screen based on the renderable rects it contains
+         * 
+         * @param token this is a token that has an accurate renerable_rects object, but may not have an updates token.width value
+         */
         void calculateTokenRenderableWidth(Token &token){
             std::list<SDL_Rect>::iterator renderable_rect_iterator;
             renderable_rect_iterator = token.renderable_rects.begin();
@@ -384,6 +389,12 @@ class WordWrap{
             }            
         }
 
+        /**
+         * @brief This function trims the leading and trailing whitespace off std::string s and returns the string without those spaces.  The code for this function was taken from https://www.techiedelight.com/trim-string-cpp-remove-leading-trailing-spaces/
+         * 
+         * @param s This is an std::string that may have leading or trailing spaces in it which needs to be trimmed.
+         * @return std::string without leading or trailing spaces
+         */
         std::string trim(const std::string &s)
         {
             auto start = s.begin();
@@ -688,24 +699,32 @@ class BitmapFont{
 
         }
 
-    int justifyLineStartOffsetX(int line_width, int max_width, std::string justification){
-        int offset_x = max_width-line_width;
-        std::string right = "right";
-        std::string center = "center";
-        if(justification.compare(right)==0){
-            // once we subtract the line_width from the max_width, we have the offset to add to each line to make it end at the right edge.
-            // We don't have to do anything else here.  This branch is here for readability.
-            offset_x=offset_x;
-        }else if (justification.compare(center)==0){
-            // if center justified, once we subtract the line_width from the max_width, we can simply divide that by 2 to get an offset that
-            // will make the line of tect center-justified to the max_width
-            offset_x = offset_x/2;
-        }else{
-            // Text is justified left by default.  This branch will just set the x_offset to zero so it remains left-justified.
-            offset_x=0;
+        /**
+         * @brief This function calculates the offset of the x value in pixels that a particular line of text needs to berendered to have it appear as left, right, or center justified.
+         * 
+         * @param line_width This is the width in pixels of a single line to be rendered after it has been scaled by the point value
+         * @param max_width This is the maximum width of the text block that can hold wrapped text.
+         * @param justification this is a std::string with possible values ["left","right","center"].  Default is "left"
+         * @return int this function returns the offset in pixels to be applied to the x value when calling placeStringAtXY()
+         */
+        int justifyLineStartOffsetX(int line_width, int max_width, std::string justification){
+            int offset_x = max_width-line_width;
+            std::string right = "right";
+            std::string center = "center";
+            if(justification.compare(right)==0){
+                // once we subtract the line_width from the max_width, we have the offset to add to each line to make it end at the right edge.
+                // We don't have to do anything else here.  This branch is here for readability.
+                offset_x=offset_x;
+            }else if (justification.compare(center)==0){
+                // if center justified, once we subtract the line_width from the max_width, we can simply divide that by 2 to get an offset that
+                // will make the line of tect center-justified to the max_width
+                offset_x = offset_x/2;
+            }else{
+                // Text is justified left by default.  This branch will just set the x_offset to zero so it remains left-justified.
+                offset_x=0;
+            }
+            return offset_x;
         }
-        return offset_x;
-    }
 
         /**
          * @brief This function will render this_string of Glyphs across multiple lines at x, y pixel location on the screen.  The string will 
@@ -716,7 +735,8 @@ class BitmapFont{
          * @param x this is the x position to place the top left corner of the first character of the string
          * @param y this is the y position to place the top left corner of the first character of the string
          * @param pt the font size (10pt, 12pt, 14pt, etc)
-         * @param line_width this is the total width in pixels that the string needs to be placed in before moving to the next line
+         * @param max_line_width this is the total width in pixels that the string needs to be placed in before moving to the next line
+         * @param justification This is the justification to present for the wrapped text.  Possible options are ["left","right","center"].  Default is "left" justified
          */
         void placeWordWrappedStringAtXY(std::string this_string, int x, int y, int pt, int max_line_width, std::string justification){
 
